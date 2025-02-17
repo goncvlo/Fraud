@@ -1,0 +1,5 @@
+data_loader:
+  path: C:\Users\gonpr\Downloads\creditcard_2023.csv
+model:
+  test_set_size: 0.05
+  validation_set_size: 0.1 # validation set is part of train set
