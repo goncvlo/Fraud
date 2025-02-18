@@ -1,38 +1,62 @@
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import GridSearchCV
+import mlflow
+import os
+from src.models.classification import Classification
 
-def train_test_splitt(
+# set mlflow tracking
+mlflow.set_tracking_uri("http://127.0.0.1:5000")
+mlflow.autolog(disable=True)
+
+def grid_search(
         X: np.ndarray | pd.DataFrame
         , y: np.ndarray | pd.Series
-        , is_test_split: bool
-        , **kwargs
-        ) -> dict:
-    """
-    Split into train & test sets through enhancing original function sklearn function.
+        , hyper_params: dict
+        , cv: None | int = 5 # None for KFold, Int for StratKFold or iterable
+        , scoring_metric: str = 'accuracy' # metric to be evaluated
+        ):
 
-    Args:
-        X (np.ndarray | pd.DataFrame): Features or predictors.
-        Y (np.ndarray | pd.Series): Targets.
+    # set mlflow tracking
+    mlflow.set_experiment(experiment_name='model_evaluation')
+    with mlflow.start_run(run_name='algorithm_evaluation'):
 
-    Returns:
-        dict: A dictionary containing features and targets for train and test sets.
-    """
+        # set grid search for each algorithm
+        for algo in hyper_params.keys():
+            with mlflow.start_run(run_name=algo, nested=True):
+                
+                # fit algorithm using cross-validation
+                clf = GridSearchCV(
+                    estimator=Classification(algorithm=algo).model
+                    , param_grid=hyper_params[algo]
+                    , scoring=scoring_metric
+                    , refit=True
+                    , cv=cv
+                    , return_train_score=True
+                )
+                clf.fit(X=X, y=y)
 
-    d = dict()
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, **kwargs
-    )
+                # logging hyper-params
+                mlflow.log_dict(
+                    dictionary=hyper_params[algo]
+                    , artifact_file="hyper_params.yml"
+                    )
+                # logging params, model and score
+                mlflow.log_params(params=clf.best_params_)
+                signature = mlflow.models.infer_signature(
+                    model_input = X
+                    , model_output = y
+                    )
+                mlflow.sklearn.log_model(
+                    sk_model=clf.best_estimator_
+                    , artifact_path='model_instance'
+                    , signature=signature
+                    )
+                mlflow.log_metric(key=scoring_metric, value=clf.best_score_)
+                # logging CV results
+                pd.DataFrame(clf.cv_results_).to_csv('cv_results_.csv')
+                mlflow.log_artifact('cv_results_.csv')
+                os.remove('cv_results_.csv')
 
-    # return results whether split was for test or validation sets
-    if is_test_split:
-        d['X_train'] = X_train
-        d['X_test'] = X_test
-        d['y_train'] = y_train
-        d['y_test'] = y_test
-    else:
-        d['X_train'] = X_train
-        d['X_validation'] = X_test
-        d['y_train'] = y_train
-        d['y_validation'] = y_test
-    return d
+                mlflow.end_run()
+        mlflow.end_run()

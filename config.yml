@@ -1,5 +1,22 @@
 data_loader:
   path: C:\Users\gonpr\Downloads\creditcard_2023.csv
-model:
+model_selection:
   test_set_size: 0.05
-  validation_set_size: 0.1 # validation set is part of train set
+  cross_validator: 5
+  scoring_metric: 'accuracy'
+hyper_parameter_otimization:
+  logistic_regression:
+    tol:
+      - 0.0001
+      - 0.00005
+    max_iter:
+      - 100
+  decision_tree:
+    max_depth:
+      - 100
+    min_samples_leaf:
+      - 2
+      - 5
+    max_leaf_nodes:
+      - 10
+      - 20

@@ -1,10 +1,16 @@
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from xgboost import XGBClassifier
 
 # supported algorithms
 algos = {
     'logistic_regression': LogisticRegression
+    , 'decision_tree': DecisionTreeClassifier
+    , 'random_forest': RandomForestClassifier
+    , 'xgboost': XGBClassifier
     }
 
 class Classification:
@@ -36,8 +42,7 @@ class Classification:
         """
         bla bla bla
         """
-        if self.method == "logistic_regression":
-            return self.model.predict(X=X)
+        return self.model.predict(X=X)
         
     def score(self, X: np.ndarray | pd.DataFrame):
         """
@@ -45,6 +50,5 @@ class Classification:
         
         X (np.ndarray | pd.DataFrame): Features or predictors.
         """
-        if self.method == "logistic_regression":
-            return self.model.predict_proba(X=X)
+        return self.model.predict_proba(X=X)
         
