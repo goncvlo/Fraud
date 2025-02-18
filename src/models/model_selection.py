@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import GridSearchCV
+from sklearn.feature_selection import SequentialFeatureSelector
 import mlflow
 import os
 from src.models.classification import Classification
@@ -16,6 +17,16 @@ def grid_search(
         , cv: None | int = 5 # None for KFold, Int for StratKFold or iterable
         , scoring_metric: str = 'accuracy' # metric to be evaluated
         ):
+    """
+    Logs grid search results, for multiple algorithms, into mlflow.
+
+    Args:
+        X (np.ndarray | pd.DataFrame): Features or predictors.
+        y (np.ndarray | pd.Series): Target values.
+        hyper_params (dict): Different hyper-params for each algorithm. 
+        cv (None | int): CV Iterator - None for KFold, Int for StratKFold or other.
+        scoring_metric (str): metric to be evaluated.
+    """
 
     # set mlflow tracking
     mlflow.set_experiment(experiment_name='model_evaluation')
@@ -60,3 +71,40 @@ def grid_search(
 
                 mlflow.end_run()
         mlflow.end_run()
+
+def feature_selector(
+        X: np.ndarray | pd.DataFrame
+        , y: np.ndarray | pd.Series
+        , algorithm: str
+        , algorithm_params: dict | None
+        , tol: float
+        , cv: None | int = 5
+        , scoring_metric: str = 'accuracy'
+        )->list:
+    """
+    Forward feature selection.
+
+    Args:
+        X (np.ndarray | pd.DataFrame): Features or predictors.
+        y (np.ndarray | pd.Series): Target values.
+        hyper_params (dict): Different hyper-params for each algorithm. 
+        cv (None | int): CV Iterator - None for KFold, Int for StratKFold or other.
+        scoring_metric (str): metric to be evaluated.
+    Returns:
+        (list): most important features whose contribution doesn't exceed tol.
+    """
+    if algorithm_params is None:
+        model = Classification(algorithm=algorithm).model
+    else:
+        model = Classification(algorithm=algorithm, **algorithm_params).model
+    clf = SequentialFeatureSelector(
+        estimator=model
+        , n_features_to_select='auto'
+        , tol=tol
+        , direction='forward'
+        , scoring=scoring_metric
+        , cv=cv
+    )
+    clf.fit(X=X, y=y)
+
+    return X.columns[clf.get_support()]
