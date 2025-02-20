@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
@@ -8,6 +9,7 @@ from xgboost import XGBClassifier
 # supported algorithms
 algos = {
     'logistic_regression': LogisticRegression
+    , 'support_vector_machine': SVC
     , 'decision_tree': DecisionTreeClassifier
     , 'random_forest': RandomForestClassifier
     , 'xgboost': XGBClassifier
