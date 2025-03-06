@@ -14,8 +14,8 @@ def grid_search(
         X: np.ndarray | pd.DataFrame
         , y: np.ndarray | pd.Series
         , hyper_params: dict
-        , cv: None | int = 5
-        , scoring_metric: str = 'accuracy'
+        , cv: None | int
+        , scoring_metric: str
         ):
     """
     Logs grid search results, for multiple algorithms, into mlflow.
@@ -30,7 +30,10 @@ def grid_search(
 
     # set mlflow tracking
     mlflow.set_experiment(experiment_name='model_evaluation')
-    with mlflow.start_run(run_name='algorithm_evaluation'):
+    with mlflow.start_run(
+        run_name='algorithm_evaluation'
+        , description='Evaluate the performance of different algorithms with simple hyper-params.'
+        ):
 
         # set grid search for each algorithm
         for algo in hyper_params.keys():
@@ -76,10 +79,10 @@ def feature_selector(
         X: np.ndarray | pd.DataFrame
         , y: np.ndarray | pd.Series
         , algorithm: str
-        , algorithm_params: dict | None
+        , algorithm_params: dict
         , tol: float
-        , cv: None | int = 5
-        , scoring_metric: str = 'accuracy'
+        , cv: None | int
+        , scoring_metric: str
         )->list:
     """
     Forward feature selection.
@@ -87,16 +90,17 @@ def feature_selector(
     Args:
         X (np.ndarray | pd.DataFrame): Features or predictors.
         y (np.ndarray | pd.Series): Target values.
-        hyper_params (dict): Different hyper-params for each algorithm. 
+        algorithm (str): Algorithm to be tested.
+        algorithm_params (dict): Hyper-params for the selected algorithm.
+        tol (float): Tolerance for the scoring_metric.
         cv (None | int): CV Iterator - None for KFold, Int for StratKFold or other.
         scoring_metric (str): metric to be evaluated.
     Returns:
-        (list): most important features whose contribution doesn't exceed tol.
+        (list): Most important features whose contribution doesn't exceed tol.
     """
-    if algorithm_params is None:
-        model = Classification(algorithm=algorithm).model
-    else:
-        model = Classification(algorithm=algorithm, **algorithm_params).model
+    
+    # fit algorithm into feature selector
+    model = Classification(algorithm=algorithm, **algorithm_params).model
     clf = SequentialFeatureSelector(
         estimator=model
         , n_features_to_select='auto'

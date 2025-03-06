@@ -21,8 +21,8 @@ class Classification:
         Initializes the Classification model class.
 
         Parameters:
-            algorithm (str): The algorithm to use.
-            kwargs: Parameters for the specified algorithm.
+            algorithm (str): Algorithm to use.
+            kwargs: Hyper-params for the specified algorithm.
         """
         
         # validate the algorithm and initialize it
@@ -33,24 +33,42 @@ class Classification:
             raise ValueError(f"Invalid method '{self.method}'. Choose from {list(algos.keys())}.")
 
     def fit(self
-            , X: np.ndarray | pd.DataFrame, y: np.ndarray | pd.Series
+            , X: np.ndarray | pd.DataFrame
+            , y: np.ndarray | pd.Series
             , sample_weight = None
             ):
-        """Fits the model to the data."""
+        """
+        Feeds data to the model.
+        
+        Args:
+            X (np.ndarray | pd.DataFrame): Features or predictors.
+            y (np.ndarray | pd.Series): Target values.
+        """
+        
         self.model.fit(X=X, y=y, sample_weight=sample_weight)
         return self
     
     def predict(self, X: np.ndarray | pd.DataFrame):
         """
-        bla bla bla
+        Predicts target value for the given observations.
+
+        Args:
+            X (np.ndarray | pd.DataFrame): Features or predictors.
+        Returns:
+            y (np.ndarray | pd.Series): Predicted target values.
         """
+
         return self.model.predict(X=X)
         
     def score(self, X: np.ndarray | pd.DataFrame):
         """
-        bla bla bla
-        
-        X (np.ndarray | pd.DataFrame): Features or predictors.
+        Computes probability score for the given observations.
+
+        Args:
+            X (np.ndarray | pd.DataFrame): Features or predictors.
+        Returns:
+            p (np.ndarray | pd.Series): Estimated class probabilities.
         """
+
         return self.model.predict_proba(X=X)
         
