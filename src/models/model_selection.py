@@ -14,8 +14,8 @@ def grid_search(
         X: np.ndarray | pd.DataFrame
         , y: np.ndarray | pd.Series
         , hyper_params: dict
-        , cv: None | int = 5 # None for KFold, Int for StratKFold or iterable
-        , scoring_metric: str = 'accuracy' # metric to be evaluated
+        , cv: None | int = 5
+        , scoring_metric: str = 'accuracy'
         ):
     """
     Logs grid search results, for multiple algorithms, into mlflow.
@@ -52,7 +52,7 @@ def grid_search(
                     dictionary=hyper_params[algo]
                     , artifact_file="hyper_params.yml"
                     )
-                # logging params, model and score
+                # logging best params, model and score
                 mlflow.log_params(params=clf.best_params_)
                 signature = mlflow.models.infer_signature(
                     model_input = X
