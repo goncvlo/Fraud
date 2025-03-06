@@ -4,3 +4,4 @@ model_selection:
   test_set_size: 0.05
   cross_validator: 5
   scoring_metric: 'accuracy'
+  tolerance: 0.005
