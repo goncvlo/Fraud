@@ -6,18 +6,18 @@ model_selection:
   scoring_metric: 'accuracy'
   tolerance: 0.005
   algorithms:
-    logistic_regression:
+    LogisticRegression:
       tol: [0.0001, 0.00005]
       max_iter: [100]
-    decision_tree:
+    DecisionTreeClassifier:
       max_depth: [20]
       min_samples_leaf: [2, 5]
       max_leaf_nodes: [10]
-    random_forest:
+    RandomForestClassifier:
       n_estimators: [10, 20]
       max_depth: [20]
       min_samples_leaf: [2, 5]
       max_leaf_nodes: [10]
-    xgboost:
+    XGBClassifier:
       n_estimators: [10, 20]
       max_depth: [20]

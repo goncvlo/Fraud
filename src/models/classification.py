@@ -8,11 +8,11 @@ from xgboost import XGBClassifier
 
 # supported algorithms
 algos = {
-    'logistic_regression': LogisticRegression
-    , 'support_vector_machine': SVC
-    , 'decision_tree': DecisionTreeClassifier
-    , 'random_forest': RandomForestClassifier
-    , 'xgboost': XGBClassifier
+    'LogisticRegression': LogisticRegression
+    , 'SVC': SVC
+    , 'DecisionTreeClassifier': DecisionTreeClassifier
+    , 'RandomForestClassifier': RandomForestClassifier
+    , 'XGBClassifier': XGBClassifier
     }
 
 class Classification:
@@ -26,7 +26,7 @@ class Classification:
         """
         
         # validate the algorithm and initialize it
-        self.method = algorithm.lower()
+        self.method = algorithm
         if self.method in algos:
             self.model = algos[self.method](**kwargs)
         else:
