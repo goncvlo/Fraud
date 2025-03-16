@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, TunedThresholdClassifierCV
 from sklearn.feature_selection import chi2, f_classif, SequentialFeatureSelector
 import mlflow
 import os
@@ -137,3 +137,39 @@ class FeatureSelection:
         clf.fit(X=self.X, y=self.y)
 
         return self.X.columns[clf.get_support()]
+
+class ClassificationThreshold():
+    def __init__(self, cv, scoring_metric):
+        """
+        Set CV settings and scoring metric.
+
+        Args:
+            cv (Optional[int]): CV iterator (None for KFold, int for StratKFold or other).
+            scoring_metric (str): Metric to evaluate.
+        """
+        self.cv = cv
+        self.scoring_metric = scoring_metric
+    
+    def fit(self, clf, X: pd.DataFrame, y: pd.Series):
+        """
+        Set predictors and target, X and y, respect.
+
+        Args:
+            clf: original model to be tuned.
+            X (np.ndarray | pd.DataFrame): Features or predictors.
+            y (np.ndarray | pd.Series): Target values.
+        """
+
+        tuned_clf = TunedThresholdClassifierCV(
+            estimator=clf.model
+            , scoring=self.scoring_metric
+            , response_method='predict_proba'
+            , cv=self.cv
+            , refit=True
+            , random_state=123
+            , store_cv_results=True
+        )
+        tuned_clf.fit(X=X, y=y)
+        
+        self.model = tuned_clf
+        return tuned_clf.best_threshold_
