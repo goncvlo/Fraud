@@ -15,7 +15,7 @@ class GridSearch:
         """
         self.cross_validator = model_selection['cross_validator']
         self.scoring_metric = model_selection['scoring_metric']
-        self.hyperparams = model_selection['algorithms']
+        self.param_grid = model_selection['param_grid']
         self.best_algorithm = None
         self.best_hyperparams = None
         self.best_score = -np.inf
@@ -25,7 +25,7 @@ class GridSearch:
         
         results = {}
         # perform grid search for each algorithm
-        for algorithm, param_grid in self.hyperparams.items():
+        for algorithm, param_grid in self.param_grid.items():
 
             clf = GridSearchCV(
                 estimator=Classification(algorithm=algorithm).model
@@ -46,7 +46,7 @@ class GridSearch:
             results[algorithm] = {}
             for key, value in zip(
                 ['best_hyperparams', 'hyperparams', 'best_score', 'cv_results']
-                , [clf.best_params_, self.hyperparams[algorithm], clf.best_score_, clf.cv_results_]
+                , [clf.best_params_, self.param_grid[algorithm], clf.best_score_, clf.cv_results_]
                 ):
                 results[algorithm][key] = value
         
