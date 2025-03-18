@@ -33,7 +33,7 @@ class GridSearch:
                 , param_grid=param_grid
                 , scoring=self.scoring_metric
                 , refit=True
-                , cv=self.cv
+                , cv=self.cross_validator
                 , return_train_score=True
                 )
             clf.fit(X, y)
@@ -82,8 +82,7 @@ class FeatureSelection:
         Forward feature selection.
 
         Args:
-            algorithm (str): Algorithm on which to perform selection.
-            hyperparams (dict): Hyperparameters of the algorithm.
+            clf (Classification): Algorithm on which to perform selection.
             model_selection (dict): Config dictionary of model selection.
         Returns:
             (list): Top features whose contribution doesn't exceed tol.
