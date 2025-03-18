@@ -16,7 +16,6 @@ class GridSearch:
         self.cross_validator = model_selection['cross_validator']
         self.scoring_metric = model_selection['scoring_metric']
         self.hyperparams = model_selection['algorithms']
-        self.results = None
         self.best_algorithm = None
         self.best_hyperparams = None
         self.best_score = -np.inf

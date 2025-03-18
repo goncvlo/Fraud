@@ -5,13 +5,13 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.colors import ListedColormap
 
 
-def plot_boundary(X: np.ndarray | pd.DataFrame, y: np.ndarray | pd.Series, clf, plot_points: bool = False, elev: int = 25, azim: int = 135):
+def plot_boundary(X: pd.DataFrame, y: pd.Series, clf, plot_points: bool = False, elev: int = 25, azim: int = 135):
     """
     Plots decision boundary in 2D or 3D.
         
     Args:
-        X (np.ndarray | pd.DataFrame): Features or predictors.
-        y (np.ndarray | pd.Series): Target values.
+        X (pd.DataFrame): Features or predictors.
+        y (pd.Series): Target values.
         clf (Classification instance): classifier instance (e.g., LogisticRegression, DecisionTree).
         plot_points (bool): whether or not to plot (X,y) points.
         elev (int): Elevation angle for 3D plots.
@@ -28,7 +28,7 @@ def plot_boundary(X: np.ndarray | pd.DataFrame, y: np.ndarray | pd.Series, clf, 
 
     fig, ax = plt.subplots(figsize=(10, 8))
 
-    if clf.method == 'LogisticRegression':
+    if clf.algorithm == 'LogisticRegression':
         # decision boundary params
         w = clf.model.coef_[0]
         b = clf.model.intercept_[0]
@@ -58,7 +58,7 @@ def plot_boundary(X: np.ndarray | pd.DataFrame, y: np.ndarray | pd.Series, clf, 
             # set view angle for better visualization
             ax.view_init(elev=elev, azim=azim)
     
-    elif clf.method == 'DecisionTreeClassifier':
+    elif clf.algorithm == 'DecisionTreeClassifier':
         # decision boundary
         x1, x2 = np.meshgrid(x1, x2)
 
@@ -82,7 +82,7 @@ def plot_boundary(X: np.ndarray | pd.DataFrame, y: np.ndarray | pd.Series, clf, 
             ax.view_init(elev=elev, azim=azim)
 
     else:
-        raise NotImplementedError(f"Plotting not implemented for classifier {clf.method}")
+        raise NotImplementedError(f"Plotting not implemented for classifier {clf.algorithm}")
 
     # plot data points if required
     if plot_points:
@@ -95,5 +95,5 @@ def plot_boundary(X: np.ndarray | pd.DataFrame, y: np.ndarray | pd.Series, clf, 
             ax.legend(*scatter.legend_elements(), title="Class", loc='best')
 
     # set plot title
-    ax.set_title(f"{clf.method} | Decision Boundary")
+    ax.set_title(f"{clf.algorithm} | Decision Boundary")
     plt.show()

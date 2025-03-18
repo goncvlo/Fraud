@@ -29,7 +29,7 @@ class Classification:
         if self.algorithm in algorithms:
             self.model = algorithms[self.algorithm](**kwargs)
         else:
-            raise ValueError(f"{algorithm} isn't supported. Select from {list(algorithms.keys())}.")
+            raise NotImplementedError(f"{algorithm} isn't supported. Select from {list(algorithms.keys())}.")
 
     def fit(self, X: pd.DataFrame, y: pd.Series, sample_weight = None):
         """Feeds data, predictors & target, into the algorithm."""
