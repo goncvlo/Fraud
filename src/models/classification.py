@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
@@ -7,7 +6,7 @@ from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
 
 # supported algorithms
-algos = {
+algorithms = {
     'LogisticRegression': LogisticRegression
     , 'SVC': SVC
     , 'DecisionTreeClassifier': DecisionTreeClassifier
@@ -22,53 +21,28 @@ class Classification:
 
         Parameters:
             algorithm (str): Algorithm to use.
-            kwargs: Hyper-params for the specified algorithm.
+            kwargs (dict): Hyperparams for the specified algorithm.
         """
         
         # validate the algorithm and initialize it
-        self.method = algorithm
-        if self.method in algos:
-            self.model = algos[self.method](**kwargs)
+        self.algorithm = algorithm
+        if self.algorithm in algorithms:
+            self.model = algorithms[self.algorithm](**kwargs)
         else:
-            raise ValueError(f"Invalid method '{self.method}'. Choose from {list(algos.keys())}.")
+            raise ValueError(f"{algorithm} isn't supported. Select from {list(algorithms.keys())}.")
 
-    def fit(self
-            , X: np.ndarray | pd.DataFrame
-            , y: np.ndarray | pd.Series
-            , sample_weight = None
-            ):
-        """
-        Feeds data to the model.
-        
-        Args:
-            X (np.ndarray | pd.DataFrame): Features or predictors.
-            y (np.ndarray | pd.Series): Target values.
-        """
+    def fit(self, X: pd.DataFrame, y: pd.Series, sample_weight = None):
+        """Feeds data, predictors & target, into the algorithm."""
         
         self.model.fit(X=X, y=y, sample_weight=sample_weight)
-        return self
     
-    def predict(self, X: np.ndarray | pd.DataFrame):
-        """
-        Predicts target value for the given observations.
-
-        Args:
-            X (np.ndarray | pd.DataFrame): Features or predictors.
-        Returns:
-            y (np.ndarray | pd.Series): Predicted target values.
-        """
+    def predict(self, X: pd.DataFrame):
+        """Predicts target value for the given observations."""
 
         return self.model.predict(X=X)
         
-    def score(self, X: np.ndarray | pd.DataFrame):
-        """
-        Computes probability score for the given observations.
-
-        Args:
-            X (np.ndarray | pd.DataFrame): Features or predictors.
-        Returns:
-            p (np.ndarray | pd.Series): Estimated class probabilities.
-        """
+    def score(self, X: pd.DataFrame):
+        """Computes probability score for the given observations."""
 
         return self.model.predict_proba(X=X)
-        
+    
