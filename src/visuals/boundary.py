@@ -3,16 +3,17 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.colors import ListedColormap
+from src.models.classification import Classification
 
 
-def plot_boundary(X: pd.DataFrame, y: pd.Series, clf, plot_points: bool = False, elev: int = 25, azim: int = 135):
+def plot_boundary(X: pd.DataFrame, y: pd.Series, clf: Classification, plot_points: bool = False, elev: int = 25, azim: int = 135):
     """
     Plots decision boundary in 2D or 3D.
         
     Args:
         X (pd.DataFrame): Features or predictors.
         y (pd.Series): Target values.
-        clf (Classification instance): classifier instance (e.g., LogisticRegression, DecisionTree).
+        clf (Classification): classifier instance (e.g., LogisticRegression, DecisionTree).
         plot_points (bool): whether or not to plot (X,y) points.
         elev (int): Elevation angle for 3D plots.
         azim (int): Azimuth angle for 3D plots.
