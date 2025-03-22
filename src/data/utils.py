@@ -10,7 +10,7 @@ def resample_data(df: pd.DataFrame, pos_share: float):
         df (pd.DataFrame): dataframe containing features and target.
         pos_share (float): share of positive labels in the new dataframe.
     Returns:
-        (pd.DataFrame): dataframe with resample data.
+        df_sampled (pd.DataFrame): dataframe with resample data.
     """
 
     # resample positive and negative observations

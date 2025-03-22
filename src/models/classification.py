@@ -17,7 +17,7 @@ algorithms = {
 class Classification:
     def __init__(self, algorithm: str, **kwargs):
         """
-        Initializes the Classification model class.
+        Set algorithm and model.
 
         Parameters:
             algorithm (str): Algorithm to use.

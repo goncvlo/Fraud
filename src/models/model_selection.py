@@ -7,12 +7,7 @@ from typing import Optional
 
 class GridSearch:
     def __init__(self, model_selection: dict):
-        """
-        Set CV settings, scoring metric and hyperparameters for grid search.
-
-        Args:
-            model_selection (dict): Config dictionary of model selection.
-        """
+        """Set CV settings, scoring metric and hyperparameters for grid search."""
         self.cross_validator = model_selection['cross_validator']
         self.scoring_metric = model_selection['scoring_metric']
         self.param_grid = model_selection['param_grid']
@@ -102,12 +97,7 @@ class FeatureSelection:
 
 class ClassificationThreshold():
     def __init__(self, model_selection: dict):
-        """
-        Set CV settings and scoring metric.
-
-        Args:
-            model_selection (dict): Config dictionary of model selection.
-        """
+        """Set CV settings and scoring metric."""
         self.cross_validator = model_selection['cross_validator']
         self.scoring_metric = model_selection['scoring_metric']
     
