@@ -4,11 +4,11 @@ from sklearn.model_selection import GridSearchCV, TunedThresholdClassifierCV
 from src.models.classification import Classification
 
 class GridSearch:
-    def __init__(self, model_selection: dict):
+    def __init__(self, config: dict):
         """Set CV settings, scoring metric and hyperparameters for grid search."""
-        self.cross_validator = model_selection['cross_validator']
-        self.scoring_metric = model_selection['scoring_metric']
-        self.param_grid = model_selection['param_grid']
+        self.cross_validator = config['cross_validator']
+        self.scoring_metric = config['scoring_metric']
+        self.param_grid = config['model_selection']['param_grid']
         self.best_algorithm = None
         self.best_hyperparams = None
         self.best_score = -np.inf
@@ -46,10 +46,10 @@ class GridSearch:
         self.results = results
 
 class ClassificationThreshold():
-    def __init__(self, model_selection: dict):
+    def __init__(self, config: dict):
         """Set CV settings and scoring metric."""
-        self.cross_validator = model_selection['cross_validator']
-        self.scoring_metric = model_selection['scoring_metric']
+        self.cross_validator = config['cross_validator']
+        self.scoring_metric = config['scoring_metric']
     
     def fit(self, clf: Classification, X: pd.DataFrame, y: pd.Series):
         """Fits TunedThresholdClassifierCV to get best threshold."""

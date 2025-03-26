@@ -25,7 +25,7 @@ class Classification:
         """
         Set algorithm and model.
 
-        Parameters:
+        Args:
             algorithm (str): Algorithm to use.
             kwargs (dict): Hyperparams for the specified algorithm.
         """

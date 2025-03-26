@@ -15,7 +15,7 @@ class FeatureSelection:
         Args:
             features (list[str]): categorical features to be tested.
         Returns:
-            (list): Categorical features which are related with the target.
+            (list): categorical features which are related with the target.
         """
 
         # target is categorical - assumption is, distinct target values is up to 5
@@ -26,25 +26,25 @@ class FeatureSelection:
 
         return features[p_values<0.05]
 
-    def wrapper(self, clf: Classification, model_selection: dict):
+    def wrapper(self, clf: Classification, config: dict):
         """
         Forward feature selection.
 
         Args:
-            clf (Classification): Algorithm on which to perform selection.
-            model_selection (dict): Config dictionary of model selection.
+            clf (Classification): clgorithm on which to perform selection.
+            config (dict): config dictionary of model selection.
         Returns:
-            (list): Top features whose contribution doesn't exceed tol.
+            (list): top features whose contribution doesn't exceed tol.
         """
     
         # fit algorithm into feature selector
         clf = SequentialFeatureSelector(
             estimator=clf.model
             , n_features_to_select='auto'
-            , tol=model_selection['tolerance']
+            , tol=config['feature_selection']['tolerance']
             , direction='forward'
-            , scoring=model_selection['scoring_metric']
-            , cv=model_selection['cross_validator']
+            , scoring=config['scoring_metric']
+            , cv=config['cross_validator']
         )
         clf.fit(X=self.X, y=self.y)
 
