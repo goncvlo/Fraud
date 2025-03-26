@@ -1,23 +1,27 @@
 data_loader:
   path: C:\Users\gonpr\Downloads\creditcard_2023.csv
-model_selection:
-  test_set_size: 0.05
+train_test_split:
+  test_size: 0.05
+  train_sizes: [0.5, 0.5]
+optimization:
   cross_validator: 5
   scoring_metric: 'accuracy'
-  tolerance: 0.0005
-  param_grid:
-    LogisticRegression:
-      tol: [0.0001, 0.00005]
-      max_iter: [100]
-    DecisionTreeClassifier:
-      max_depth: [20]
-      min_samples_leaf: [2, 5]
-      max_leaf_nodes: [10]
-    RandomForestClassifier:
-      n_estimators: [10, 20]
-      max_depth: [20]
-      min_samples_leaf: [2, 5]
-      max_leaf_nodes: [10]
-    XGBClassifier:
-      n_estimators: [10, 20]
-      max_depth: [20]
+  model_selection:
+    param_grid:
+      LogisticRegression:
+        tol: [0.0001, 0.00005]
+        max_iter: [40]
+      DecisionTreeClassifier:
+        max_depth: [20]
+        min_samples_leaf: [2, 5]
+        max_leaf_nodes: [10]
+      RandomForestClassifier:
+        n_estimators: [10, 20]
+        max_depth: [20]
+        min_samples_leaf: [2, 5]
+        max_leaf_nodes: [10]
+      XGBClassifier:
+        n_estimators: [10, 20]
+        max_depth: [20]
+  feature_selection:
+    tolerance: 0.0005

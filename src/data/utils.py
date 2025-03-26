@@ -2,16 +2,7 @@ import pandas as pd
 from sklearn.utils import resample
 
 def resample_data(df: pd.DataFrame, pos_share: float):
-    """
-    Resamples positive and negative obs based on pos_share.
-    It assumes labels are 1 and 0.
-
-    Args:
-        df (pd.DataFrame): dataframe containing features and target.
-        pos_share (float): share of positive labels in the new dataframe.
-    Returns:
-        (pd.DataFrame): dataframe with resample data.
-    """
+    """Resamples obs. based on pos_share param - share of pos. labels. Labels are 1 and 0."""
 
     # resample positive and negative observations
     df_pos, df_neg = [
