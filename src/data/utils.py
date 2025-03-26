@@ -3,7 +3,7 @@ from sklearn.utils import resample
 from sklearn.model_selection import train_test_split
 
 def resample_data(df: pd.DataFrame, pos_share: float):
-    """Resamples obs. based on share of positive labels. Labels are 1 and 0."""
+    """Resamples obs. based on pos_share param - share of pos. labels. Labels are 1 and 0."""
 
     # resample positive and negative observations
     df_pos, df_neg = [
