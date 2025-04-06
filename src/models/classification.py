@@ -17,7 +17,11 @@ algorithms = {
     , 'SVC': SVC
     , 'DecisionTreeClassifier': DecisionTreeClassifier
     , 'RandomForestClassifier': RandomForestClassifier
+    , 'GradientBoostingClassifier': GradientBoostingClassifier
+    , 'MLPClassifier': MLPClassifier
     , 'XGBClassifier': XGBClassifier
+    , 'LGBMClassifier': LGBMClassifier
+    , 'CatBoostClassifier': CatBoostClassifier
     }
 
 class Classification:

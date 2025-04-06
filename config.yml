@@ -2,7 +2,7 @@ data_loader:
   path: C:\Users\gonpr\Downloads\creditcard_2023.csv
 train_test_split:
   test_size: 0.05
-  train_sizes: [0.5, 0.5]
+  train_sizes: [0.5]
 optimization:
   cross_validator: 5
   scoring_metric: 'accuracy'
