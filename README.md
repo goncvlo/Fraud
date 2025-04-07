@@ -18,11 +18,16 @@ Accuracy = P(Forecast = Actual)
 ```
 
 The notebooks folder, explores other material such as decision boundaries in 2D or threshold optimization through `predict_proba` method.
-<p float="left">
-  <img src="https://github.com/user-attachments/assets/8ceec624-120b-4535-8db7-62be90249a0d" width="333" />
-  <img src="https://github.com/user-attachments/assets/ddef7fe5-fd6c-46f0-a3c4-277d8f83b982" width="667" /> 
-</p>
 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/302f7113-d606-420a-9582-5d16b5a38b44" />
+</p>
+<p align="center"><em>Figure 1:</em> Example of decision boundary for logistic regression algorithm.</p>
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/f7157b4c-2509-4fdc-91aa-6b5c296c9f92" />
+</p>
+<p align="center"><em>Figure 2:</em> Example of classification threshold optimization.</p>
 
 #### :file_folder: Repository structure
 ```python
