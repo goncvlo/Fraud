@@ -5,24 +5,26 @@ The dataset used is `Credit Card Fraud Detection Dataset 2023`, from Kaggle, whi
 
 #### :file_folder: Repository structure
 ```python
-  src/
-  ├── data                      # data loading and preprocessing utilities
-  │  ├── prepare_data.py
-  │  └── utils.py
-  ├── models                    # model-related components
-  │  ├── classification.py
-  │  ├── evaluation.py
-  │  ├── feature_selection.py   # statistical tests and forward feature selection
-  │  ├── model_selection.py     # grid-search and classification threshold evaluation
-  │  └── utils.py
-  ├── visuals
-  │  ├── boundary.py            # 2D & 3D decision boundaries
-  │  └── pr_roc_curve.py        # precision-recall and roc curves
+  ├── notebooks/
+  | ├── decision_boundary.ipynb
+  | └── threshold.ipynb
+  ├── src/
+  │ ├── data/                   # data loading and preprocessing utilities
+  │ │ ├── prepare_data.py
+  │ │ └── utils.py
+  │ ├── models/                 # model-related components
+  │ │ ├── classification.py
+  │ │ ├── evaluation.py
+  │ │ ├── feature_selection.py  # statistical tests and forward feature selection
+  │ │ ├── model_selection.py    # grid-search and threshold evaluation
+  │ │ └── utils.py
+  │ └── visuals/
+  │   ├── boundary.py           # 2D & 3D decision boundaries
+  │   └── pr_roc_curve.py       # precision-recall and roc curves
   ├── .gitignore
   ├── README.md
   ├── config.yml                # configuration file with parameters and settings
-  ├── main1.ipynb
-  └── main2.ipynb
+  └── main.ipynb
   ```
 
 #### :rocket: Installation
