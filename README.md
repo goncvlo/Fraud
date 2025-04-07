@@ -3,6 +3,21 @@
 Fraud is a project that explores `classification techniques` in the context of `artificial intelligence`.
 The dataset used is `Credit Card Fraud Detection Dataset 2023`, from Kaggle, which "(...) contains credit card transactions made by European cardholders in the year 2023 (...)".
 
+#### :test_tube: Work
+The original dataset is balanced, i.e., contains the same proportion of fraudulent observations as non-fraudulent observations. To make it more challenging and closer to a real-world scenario, the proportion of fraudulent observations was set to 1%. The `main.py` notebook aims to show how one could create an intelligent system to accurately identify both fraudulent and non-fraudulent transactions.
+
+Note that, in this case, a random classifier which predicts fraudulent 1% of time and non-fraudulent 99% of the time, would already achieve an accuracy of 98.02%. If this serves as a baseline model, then the model to be developed needs to perform better, i.e., an accuracy greater than 98.02%.
+
+```python
+Accuracy = P(Forecast = Actual)
+         = P(A=1) x P(F=1 | A=1) + P(A=0) x P(F=0 | A=0)
+         = P(A=1) x P(F=1)       + P(A=0) x P(F=0)
+         = 0.01^2                + 0.99^2
+
+# Similarly, it can be shown that precision, recall and f1-score are equal to 0.01, for this random classifier. 
+```
+
+
 #### :file_folder: Repository structure
 ```python
   ├── notebooks/                # exploration notebooks
