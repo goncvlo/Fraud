@@ -18,9 +18,10 @@ Accuracy = P(Forecast = Actual)
 ```
 
 The notebooks folder, explores other material such as decision boundaries in 2D or threshold optimization through `predict_proba` method.
-Decision Boundary example           |  Classification Threshold example
-:-------------------------:|:-------------------------:
-<img src="https://github.com/user-attachments/assets/8ceec624-120b-4535-8db7-62be90249a0d" width="350" height=250/> | <img src="https://github.com/user-attachments/assets/ddef7fe5-fd6c-46f0-a3c4-277d8f83b982" width="900" height=250/>
+<p float="left">
+  <img src="https://github.com/user-attachments/assets/8ceec624-120b-4535-8db7-62be90249a0d" width="333" />
+  <img src="https://github.com/user-attachments/assets/ddef7fe5-fd6c-46f0-a3c4-277d8f83b982" width="667" /> 
+</p>
 
 
 #### :file_folder: Repository structure
