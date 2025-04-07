@@ -4,9 +4,9 @@ Fraud is a project that explores `classification techniques` in the context of `
 The dataset used is `Credit Card Fraud Detection Dataset 2023`, from Kaggle, which "(...) contains credit card transactions made by European cardholders in the year 2023 (...)".
 
 #### :test_tube: Work
-The original dataset is balanced, i.e., contains the same proportion of fraudulent observations as non-fraudulent observations. To make it more challenging and closer to a real-world scenario, the proportion of fraudulent observations was set to 1%. The `main.py` notebook aims to show how one could create an intelligent system to accurately identify both fraudulent and non-fraudulent transactions.
+The original dataset is balanced, i.e., contains the same proportion of fraudulent observations as non-fraudulent observations. To make it more challenging and closer to a real-world scenario, the **proportion of fraudulent observations was set to 1%**. The `main.py` notebook aims to show how one could create an intelligent system to accurately identify both fraudulent and non-fraudulent transactions.
 
-Note that, in this case, a random classifier which predicts fraudulent 1% of time and non-fraudulent 99% of the time, would already achieve an accuracy of 98.02%. If this serves as a baseline model, then the model to be developed needs to perform better, i.e., an accuracy greater than 98.02%.
+Note that, in this case, a *random classifier which predicts fraudulent 1% of time and non-fraudulent 99% of the time*, would already achieve an *accuracy of 98.02%*. If this serves as a baseline model, then the model to be developed needs to perform better, i.e., an accuracy greater than 98.02%.
 
 ```python
 Accuracy = P(Forecast = Actual)
@@ -16,6 +16,11 @@ Accuracy = P(Forecast = Actual)
 
 # Similarly, it can be shown that precision, recall and f1-score are equal to 0.01, for this random classifier. 
 ```
+
+The notebooks folder, explores other material such as decision boundaries in 2D or threshold optimization through `predict_proba` method.
+Decision Boundary example           |  Classification Threshold example
+:-------------------------:|:-------------------------:
+<img src="https://github.com/user-attachments/assets/8ceec624-120b-4535-8db7-62be90249a0d" width="350" height=250/> | <img src="https://github.com/user-attachments/assets/ddef7fe5-fd6c-46f0-a3c4-277d8f83b982" width="900" height=250/>
 
 
 #### :file_folder: Repository structure
