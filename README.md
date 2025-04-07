@@ -5,7 +5,7 @@ The dataset used is `Credit Card Fraud Detection Dataset 2023`, from Kaggle, whi
 
 #### :file_folder: Repository structure
 ```python
-  ├── notebooks/
+  ├── notebooks/                # exploration notebooks
   | ├── decision_boundary.ipynb
   | └── threshold.ipynb
   ├── src/
