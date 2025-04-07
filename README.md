@@ -15,11 +15,11 @@ The dataset used is `Credit Card Fraud Detection Dataset 2023`, from Kaggle, whi
   │ ├── models/                 # model-related components
   │ │ ├── classification.py
   │ │ ├── evaluation.py
-  │ │ ├── feature_selection.py  # statistical tests and forward feature selection
+  │ │ ├── feature_selection.py  # statistical tests and wrapper methods
   │ │ ├── model_selection.py    # grid-search and threshold evaluation
   │ │ └── utils.py
   │ └── visuals/
-  │   ├── boundary.py           # 2D & 3D decision boundaries
+  │   ├── boundary.py           # 2D decision boundaries
   │   └── pr_roc_curve.py       # precision-recall and roc curves
   ├── .gitignore
   ├── README.md
