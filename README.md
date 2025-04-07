@@ -1,6 +1,6 @@
 # Fraud
 
-Fraud is a project that explores `classification techniques` in the context of `artificial intelligence`.
+Fraud is a project that explores `classification techniques` in the context of `artificial intelligence` to perform fraud detection.
 The dataset used is `Credit Card Fraud Detection Dataset 2023`, from Kaggle, which "(...) contains credit card transactions made by European cardholders in the year 2023 (...)".
 
 #### :test_tube: Work
