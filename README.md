@@ -53,6 +53,8 @@ The notebooks folder, explores other material such as decision boundaries in 2D 
   └── main.ipynb
   ```
 
+**Note:** The path location of the dataset is stored in the config.yml file. Please adjust it or upload the dataset to your local repo.
+
 #### :rocket: Installation
 
 Follow the steps below to set up this project on your local machine.
