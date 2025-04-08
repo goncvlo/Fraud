@@ -7,10 +7,10 @@ def resample_data(df: pd.DataFrame, pos_share: float):
     # resample positive and negative observations
     df_pos, df_neg = [
         resample(
-            df[df['target'] == i]
+            df[df['label'] == i]
             , replace=False
             , n_samples=int(
-                (pos_share*i+(1-pos_share)*(1-i)) * df[df['target'] == i].shape[0]
+                (pos_share*i+(1-pos_share)*(1-i)) * df[df['label'] == i].shape[0]
                 )
             , random_state=42
             )
