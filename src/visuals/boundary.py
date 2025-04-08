@@ -36,7 +36,7 @@ def plot_boundary(X: pd.DataFrame, y: pd.Series, clf: Classification, plot_point
         ax.plot(x1, x2, "r--", label="Decision Boundary")
         ax.text(
             x=min(x1), y=min(min(x2), X.iloc[:, 1].min() * plot_points)
-            , s=f"{w[0]:.2f} * x1 + {w[1]:.2f} * x2 + {b:.2f} = 0"
+            , s=f"{w[0]:.2f} * {X.columns[0]} + {w[1]:.2f} * {X.columns[1]} + {b:.2f} = 0"
             , fontsize=12, color="green", bbox=dict(facecolor="white", alpha=0.5)
             )
         ax.set_xlabel(X.columns[0])
