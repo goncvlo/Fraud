@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 from sklearn.feature_selection import chi2, f_classif, SequentialFeatureSelector
 from src.models.classification import Classification
@@ -7,24 +8,23 @@ class FeatureSelection:
         """Set predictors and target, X and y, respectively."""
         self.X = X
         self.y = y
+        self.features = X.columns
 
-    def categorical(self, features: list[str]):
-        """
-        Checks which categorical (ordinal) features are related with the target.
+    def stats_test(self):
+        """Checks which features are related with the target."""
 
-        Args:
-            features (list[str]): categorical features to be tested.
-        Returns:
-            (list): categorical features which are related with the target.
-        """
+        # split features into 2 types - categorical and continuous
+        categorical_feats = [col for col in self.features if self.X[col].nunique() <= 5]
+        continuous_feats = [col for col in self.features if self.X[col].nunique() > 5]
+        # statistical tests
+        if categorical_feats != []:
+            chi2_stats, p_values = chi2(X=self.X[categorical_feats], y=self.y)
+            categorical_feats = np.array(categorical_feats)[p_values<0.05]
+        if continuous_feats != []:
+            f_stats, p_values = f_classif(X=self.X[continuous_feats], y=self.y)
+            continuous_feats = np.array(continuous_feats)[p_values<0.05]
 
-        # target is categorical - assumption is, distinct target values is up to 5
-        if self.y.nunique()<=5:
-            chi2_stats, p_values = chi2(X=self.X[features], y=self.y)
-        else:
-            f_stats, p_values = f_classif(X=self.X[features], y=self.y)
-
-        return features[p_values<0.05]
+        self.features = list(categorical_feats) + list(continuous_feats)
 
     def wrapper(self, clf: Classification, config: dict):
         """
@@ -46,6 +46,6 @@ class FeatureSelection:
             , scoring=config['scoring_metric']
             , cv=config['cross_validator']
         )
-        clf.fit(X=self.X, y=self.y)
+        clf.fit(X=self.X[self.features], y=self.y)
 
-        return self.X.columns[clf.get_support()]
+        self.features = self.X[self.features].columns[clf.get_support()]

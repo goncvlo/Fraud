@@ -66,5 +66,5 @@ class ClassificationThreshold():
         tuned_clf.fit(X=X, y=y)
         
         self.model = tuned_clf
-        return tuned_clf.best_threshold_
+        self.best_threshold = tuned_clf.best_threshold_
     
