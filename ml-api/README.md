@@ -16,12 +16,11 @@ Open the terminal and run the following lines of code.
 # 3. Install project dependencies
 >> pip install -r requirements.txt
 
-# 4. Click on frontend/index.html
-# cd ml-api/app/frontend
-# python -m http.server 8080
+# 4. Launch backend server
+>> uvicorn app.app:app --reload
 
-# 5. Start server
-uvicorn app.app:app --reload
+# 5. Launch frontend
+>> python -m http.server 8080 --bind 127.0.0.1 --directory frontend
 
 ```
 #### :rocket: Future work
