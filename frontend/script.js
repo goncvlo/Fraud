@@ -12,7 +12,7 @@ document.getElementById('predictForm').addEventListener('submit', function(event
     };
 
     // Make the POST request to the backend API
-    fetch('http://127.0.0.1:8000/predict', {
+    fetch('https://ml-api-416217366305.europe-southwest1.run.app/predict', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
