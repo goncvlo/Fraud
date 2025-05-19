@@ -1,5 +1,5 @@
 data_loader:
-  path: creditcard_2023.csv
+  path: creditcard.csv
 train_test_split:
   test_size: 0.05
   train_sizes: [0.5]
