@@ -50,7 +50,8 @@ The notebooks folder, explores other material such as decision boundaries in 2D 
   ├── .gitignore
   ├── README.md
   ├── config.yml                # configuration file with parameters and settings
-  └── main.ipynb
+  ├── main.ipynb
+  └── creditcard.csv            # To be added
   ```
 
 **Note:** The path location of the dataset is stored in the `config.yml` file. Please adjust it or upload the dataset to your local repository.
