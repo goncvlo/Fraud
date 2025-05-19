@@ -1,20 +1,20 @@
 # Fraud
 
 Fraud is a project that explores `classification techniques` in the context of `artificial intelligence` to perform fraud detection.
-The dataset used is `Credit Card Fraud Detection Dataset 2023`, from Kaggle, which "(...) contains credit card transactions made by European cardholders in the year 2023 (...)".
+The dataset used is [`Credit Card Fraud Detection (UBL)`](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud), from Kaggle, which "(...) contains transactions made by credit cards in September 2013 by European cardholders. This dataset presents transactions that occurred in two days, where we have 492 frauds out of 284,807 transactions. (...)".
 
 #### :test_tube: Work
-The original dataset is balanced, i.e., contains the same proportion of fraudulent observations as non-fraudulent observations. To make it more challenging and closer to a real-world scenario, the **proportion of fraudulent observations was set to 1%**. The `main.py` notebook aims to show how one could create an intelligent system to accurately identify both fraudulent and non-fraudulent transactions.
+The `main.py` notebook aims to show how one could create an intelligent system to accurately identify both fraudulent and non-fraudulent transactions.
 
-Note that, in this case, a *random classifier which predicts fraudulent 1% of time and non-fraudulent 99% of the time*, would already achieve an *accuracy of 98.02%*. If this serves as a baseline model, then the model to be developed needs to perform better, i.e., an accuracy greater than 98.02%.
+The baseline model could be a *random classifier which predicts fraudulent 0.173% of time and non-fraudulent 99.827% of the time*. This would already achieve an *accuracy of 99.65%* and therefore, the model to be developed needs to have an higher accuracy.
 
 ```python
 Accuracy = P(Forecast = Actual)
          = P(A=1) x P(F=1 | A=1) + P(A=0) x P(F=0 | A=0)
          = P(A=1) x P(F=1)       + P(A=0) x P(F=0)
-         = 0.01^2                + 0.99^2
+         = (0.173%)^2            + (1-0.173%)^2
 
-# Similarly, it can be shown that precision, recall and f1-score are equal to 0.01, for this random classifier. 
+# Similarly, it can be shown that precision, recall and f1-score are equal to 0.173%, for this random classifier. 
 ```
 
 The notebooks folder, explores other material such as decision boundaries in 2D or threshold optimization through `predict_proba` method.
@@ -79,4 +79,4 @@ Open the terminal and run the following lines of code.
 
 ```
 #### :handshake: References
-- [Kaggle Dataset](https://www.kaggle.com/datasets/nelgiriyewithana/credit-card-fraud-detection-dataset-2023)
+- [Kaggle Dataset](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
