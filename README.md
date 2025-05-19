@@ -6,7 +6,7 @@ The dataset used is [`Credit Card Fraud Detection (UBL)`](https://www.kaggle.com
 #### :test_tube: Work
 The `main.py` notebook aims to show how one could create an intelligent system to accurately identify both fraudulent and non-fraudulent transactions.
 
-The baseline model could be a *random classifier which predicts fraudulent 0.173% of time and non-fraudulent 99.827% of the time*. This would already achieve an *accuracy of 99.65%* and therefore, the model to be developed needs to have an higher accuracy.
+Using a baseline model that *randomly predicts fraud 0.173% of the time and non-fraud 99.827% of the time would already yield an accuracy of 99.65%.* Therefore, the model being developed must surpass this accuracy.
 
 ```python
 Accuracy = P(Forecast = Actual)
