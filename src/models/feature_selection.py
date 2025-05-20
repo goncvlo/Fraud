@@ -1,7 +1,9 @@
 import numpy as np
 import pandas as pd
 from sklearn.feature_selection import chi2, f_classif, SequentialFeatureSelector
-from src.models.classification import Classification
+
+from src.models.model import Classifier
+
 
 class FeatureSelection:
     def __init__(self, X: pd.DataFrame, y: pd.Series):
@@ -26,12 +28,12 @@ class FeatureSelection:
 
         self.features = list(categorical_feats) + list(continuous_feats)
 
-    def wrapper(self, clf: Classification, config: dict):
+    def wrapper(self, clf: Classifier, config: dict):
         """
         Forward feature selection.
 
         Args:
-            clf (Classification): clgorithm on which to perform selection.
+            clf (Classifier): algorithm on which to perform selection.
             config (dict): config dictionary of model selection.
         Returns:
             (list): top features whose contribution doesn't exceed tol.

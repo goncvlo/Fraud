@@ -1,7 +1,9 @@
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import GridSearchCV, TunedThresholdClassifierCV
-from src.models.classification import Classification
+
+from src.models.model import Classifier
+
 
 class GridSearch:
     def __init__(self, config: dict):
@@ -21,7 +23,7 @@ class GridSearch:
         for algorithm, param_grid in self.param_grid.items():
 
             clf = GridSearchCV(
-                estimator=Classification(algorithm=algorithm).model
+                estimator=Classifier(algorithm=algorithm).model
                 , param_grid=param_grid
                 , scoring=self.scoring_metric
                 , refit=True
@@ -45,13 +47,13 @@ class GridSearch:
         
         self.results = results
 
-class ClassificationThreshold():
+class ClassifierThreshold():
     def __init__(self, config: dict):
         """Set CV settings and scoring metric."""
         self.cross_validator = config['cross_validator']
         self.scoring_metric = config['scoring_metric']
     
-    def fit(self, clf: Classification, X: pd.DataFrame, y: pd.Series):
+    def fit(self, clf: Classifier, X: pd.DataFrame, y: pd.Series):
         """Fits TunedThresholdClassifierCV to get best threshold."""
 
         tuned_clf = TunedThresholdClassifierCV(

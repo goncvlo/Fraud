@@ -1,7 +1,8 @@
 import numpy as np
 import pandas as pd
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-from src.models.classification import Classification
+
+from src.models.model import Classifier
 
 # supported metrics
 metrics = {
@@ -11,8 +12,9 @@ metrics = {
     'f1_score': f1_score
 }
 
+
 class Evaluation:
-    def __init__(self, clf: Classification, threshold: float = 0.5):
+    def __init__(self, clf: Classifier, threshold: float = 0.5):
         self.model = clf
         self.threshold = threshold
 

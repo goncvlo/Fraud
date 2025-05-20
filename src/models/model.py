@@ -10,7 +10,6 @@ from xgboost import XGBClassifier
 from lightgbm import LGBMClassifier
 from catboost import CatBoostClassifier
 
-
 # supported algorithms
 algorithms = {
     'LogisticRegression': LogisticRegression
@@ -24,7 +23,8 @@ algorithms = {
     , 'CatBoostClassifier': CatBoostClassifier
     }
 
-class Classification:
+
+class Classifier:
     def __init__(self, algorithm: str, **kwargs):
         """
         Set algorithm and model.
