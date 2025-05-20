@@ -3,25 +3,35 @@ data_loader:
 train_test_split:
   test_size: 0.05
   train_sizes: [0.5]
+
 optimization:
   cross_validator: 5
-  scoring_metric: 'accuracy'
-  model_selection:
-    param_grid:
-      LogisticRegression:
-        tol: [0.0001, 0.00005]
-        max_iter: [40]
-      DecisionTreeClassifier:
-        max_depth: [20]
-        min_samples_leaf: [2, 5]
-        max_leaf_nodes: [10]
-      RandomForestClassifier:
-        n_estimators: [10, 20]
-        max_depth: [20]
-        min_samples_leaf: [2, 5]
-        max_leaf_nodes: [10]
-      XGBClassifier:
-        n_estimators: [10, 20]
-        max_depth: [20]
+  scoring_metric: "accuracy"
+
+  param_grid:
+    XGBClassifier:
+      fixed:
+        booster: "gbtree"
+        objective: "binary:logistic"
+        eval_metric: "error"
+        random_state: 42
+        verbosity: 1
+      tunable:
+        n_estimators: [2, 100]
+        max_depth: [3, 20]
+        learning_rate: [0.001, 0.5]
+        gamma: [0, 10]
+        subsample: [0.5, 1]
+      float_params: ["learning_rate", "gamma", "subsample"]
+    DecisionTreeClassifier:
+      fixed:
+        criterion: "gini"
+        splitter: "best"
+        random_state: 42
+      tunable:
+        max_depth: [3, 20]
+        min_samples_leaf: [2, 20]
+      float_params: []
+
   feature_selection:
     tolerance: 0.0005
