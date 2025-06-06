@@ -14,6 +14,7 @@ from catboost import CatBoostClassifier
 algorithms = {
     'LogisticRegression': LogisticRegression
     , 'SVC': SVC
+    , 'KNeighborsClassifier': KNeighborsClassifier
     , 'DecisionTreeClassifier': DecisionTreeClassifier
     , 'RandomForestClassifier': RandomForestClassifier
     , 'GradientBoostingClassifier': GradientBoostingClassifier

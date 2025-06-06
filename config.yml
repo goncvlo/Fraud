@@ -23,6 +23,48 @@ optimization:
         gamma: [0, 10]
         subsample: [0.5, 1]
       float_params: ["learning_rate", "gamma", "subsample"]
+    LGBMClassifier:
+      fixed:
+        boosting_type: "gbdt"
+        subsample_for_bin: 200000
+        objective: "binary"
+        random_state: 42
+      tunable:
+        num_leaves: [5, 200]
+        max_depth: [5, 20]
+        learning_rate : [0.01, 0.5]
+        n_estimators: [50, 200]
+        colsample_bytree: [0.3, 1.0]
+        reg_alpha: [0.1, 10.0]
+        reg_lambda: [0.1, 10.0]
+      float_params: ["learning_rate", "colsample_bytree", "reg_alpha", "reg_lambda"]
+    GradientBoostingClassifier:
+      fixed:
+        loss: "log_loss"
+        random_state: 42
+        verbose: 3
+      tunable:
+        learning_rate: [0.001, 0.5]
+        n_estimators: [2, 100]
+        subsample: [0.5, 1]
+        min_samples_split: [2, 10]
+        max_depth: [3, 20]
+        max_features: [5, 30]
+      float_params: ["learning_rate", "subsample"]
+    RandomForestClassifier:
+      fixed:
+        criterion: "gini"
+        bootstrap: True
+        oob_score: False
+        verbose: 3
+        random_state: 42
+      tunable:
+        n_estimators: [3, 100]
+        max_depth: [2, 20]
+        min_samples_split: [2, 10]
+        min_samples_leaf: [1, 10]
+        max_features: [5, 30]
+      float_params: []
     DecisionTreeClassifier:
       fixed:
         criterion: "gini"
@@ -31,6 +73,30 @@ optimization:
       tunable:
         max_depth: [3, 20]
         min_samples_leaf: [2, 20]
+      float_params: []
+    LogisticRegression:
+      fixed:
+        penalty: "l2"
+        dual: False
+        fit_intercept: True
+        random_state: 42
+        solver: "lbfgs"
+        #multi_class: "ovr"
+        verbose: 0
+      tunable:
+        tol: [0.00001, 2]
+        C: [0.2, 5]
+        max_iter: [100, 1000]
+      float_params: ["tol", "C"]
+    KNeighborsClassifier:
+      fixed:
+        weights: "uniform"
+        # algorithm: "auto" <- causing error
+        # random_state: 42
+      tunable:
+        n_neighbors: [5, 100]
+        leaf_size: [15, 100]
+        p: [2, 10]
       float_params: []
 
   feature_selection:
