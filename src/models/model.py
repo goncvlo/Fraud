@@ -41,10 +41,10 @@ class Classifier:
         else:
             raise NotImplementedError(f"{algorithm} isn't supported. Select from {list(algorithms.keys())}.")
 
-    def fit(self, X: pd.DataFrame, y: pd.Series, sample_weight = None):
+    def fit(self, X: pd.DataFrame, y: pd.Series, **kwargs):
         """Feeds data, predictors & target, into the algorithm."""
         
-        self.model.fit(X=X, y=y, sample_weight=sample_weight)
+        self.model.fit(X=X, y=y, **kwargs)
     
     def predict(self, X: pd.DataFrame):
         """Predicts target value for the given observations."""
