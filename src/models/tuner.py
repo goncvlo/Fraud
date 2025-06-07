@@ -1,13 +1,14 @@
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_val_score, StratifiedKFold, TunedThresholdClassifierCV
+from sklearn.utils.class_weight import compute_sample_weight
 import optuna
-from sklearn.model_selection import TunedThresholdClassifierCV
 
 from src.models.model import Classifier
+from src.models.evaluation import Evaluation
 
 
-class BayesianSearch:
+class HyperParamSearch:
     def __init__(self, config: dict, algorithm: str):
         """Set CV settings, scoring metric and hyperparameters space."""
         self.cross_validator = config['cross_validator']
@@ -46,6 +47,36 @@ class BayesianSearch:
             for hp, bounds in self.param_grid['tunable'].items()
         }
         return {**tunable_params, **self.param_grid['fixed']}
+    
+
+class LabelWeightSearch:
+    def __init__(self, config: dict, estimator: Classifier):
+        self.cross_validator = config["cross_validator"]
+        self.model = estimator
+        self.scoring_metric = config["scoring_metric"]
+
+    def fit(self, X: pd.DataFrame, y: pd.Series, trial: optuna.trial.Trial):
+
+        w0 = trial.suggest_int("weight_0", 1.0, 100.0)
+        w1 = trial.suggest_int("weight_1", 1.0, 100.0)
+        
+        skf = StratifiedKFold(n_splits=self.cross_validator, shuffle=True, random_state=42)
+        scores = []
+
+        for fold, (train_idx, val_idx) in enumerate(skf.split(X, y)):
+            X_train, X_val = X.iloc[train_idx], X.iloc[val_idx]
+            y_train, y_val = y.iloc[train_idx], y.iloc[val_idx]
+
+            sample_weight = compute_sample_weight(
+                class_weight={0: w0, 1: w1}, y=y_train
+                )
+            self.model.fit(X_train, y_train, sample_weight=sample_weight)
+
+            score = Evaluation(clf=self.model)
+            score = score.fit(metric=self.scoring_metric, test=(X_val, y_val))
+            scores.append(score)
+        
+        return np.mean(scores)
     
 
 class ClassifierThreshold():
