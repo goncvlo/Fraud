@@ -3,19 +3,35 @@
 Fraud is a project that explores `classification techniques` in the context of `artificial intelligence` to perform fraud detection.
 The dataset used is [`Credit Card Fraud Detection (UBL)`](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud), from Kaggle, which "(...) contains transactions made by credit cards in September 2013 by European cardholders. This dataset presents transactions that occurred in two days, where we have 492 frauds out of 284,807 transactions. (...)".
 
-#### :test_tube: Work
+### :test_tube: Work
 The `main.py` notebook aims to show how one could create an intelligent system to accurately identify both fraudulent and non-fraudulent transactions.
 
-Using a baseline model that *randomly predicts fraud 0.173% of the time and non-fraud 99.827% of the time would already yield an accuracy of 99.65%.* Therefore, the model being developed must surpass this accuracy.
+#### Baseline Model
+Using as baseline model an estimator which *randomly predicts fraud 0.173% of the time and non-fraud 99.827% of the time, would already yield an accuracy of 99.65%.* In such an extreme case, note that an *estimator which always "predicts" non-fraud, achieves an accuracy of 99.827% - as it correctly identifies all the non-fradulent transactions but misses to correctly identify all the fraudelent transactions.*
+
+In either case, the model being developed must surpass this accuracy.
 
 ```python
+# accuracy computation for 1st baseline model
 Accuracy = P(Forecast = Actual)
          = P(A=1) x P(F=1 | A=1) + P(A=0) x P(F=0 | A=0)
          = P(A=1) x P(F=1)       + P(A=0) x P(F=0)
          = (0.173%)^2            + (1-0.173%)^2
 
-# Similarly, it can be shown that precision, recall and f1-score are equal to 0.173%, for this random classifier. 
+# similarly, it can be shown that precision, recall and f1-score are equal to 0.173%
 ```
+
+#### Model
+
+The table below summarizes the performance metrics obtained from evaluating different algorithms on the test set.
+All algorithms were optimized to maximize accuracy through bayesian search using optuna library (n_trials=10) and leveraging over sampling.
+
+| Algorithm   | Accuracy | Precision | Recall | F1 Score |
+|-------------|----------|-----------|--------|----------|
+| XGBClassifier | 0.99958 | 0.88000 | 0.88000 | 0.88000 |
+| LGBMClassifier | 0.99951 | 0.90909 | 0.80000 | 0.85106 |
+| DecisionTreeClassifier | 0.99656 | 0.30645 | 0.76000 | 0.43678 |
+| LogisticRegression | 0.95696 | 0.03333 | 0.84000 | 0.06412 |
 
 The notebooks folder, explores other material such as decision boundaries in 2D or threshold optimization through `predict_proba` method.
 
@@ -29,32 +45,36 @@ The notebooks folder, explores other material such as decision boundaries in 2D 
 </p>
 <p align="center"><em>Figure 2:</em> Example of classification threshold optimization.</p>
 
-#### :file_folder: Repository structure
+### :file_folder: Repository structure
 ```python
   ├── notebooks/                # exploration notebooks
   | ├── decision_boundary.ipynb
+  | ├── feature_selection.ipynb
   | └── threshold.ipynb
   ├── src/
   │ ├── data/                   # data loading and preprocessing utilities
   │ │ ├── prepare_data.py
   │ │ └── utils.py
   │ ├── models/                 # model-related components
-  │ │ ├── classification.py
   │ │ ├── evaluation.py
   │ │ ├── feature_selection.py  # statistical tests and wrapper methods
-  │ │ ├── model_selection.py    # grid-search and threshold evaluation
+  │ │ ├── model.py
+  │ │ ├── tuner.py              # bayesian search for hyperparam and sample_weight optimization
   │ │ └── utils.py
   │ └── visuals/
   │   ├── boundary.py           # 2D decision boundaries
   │   └── pr_roc_curve.py       # precision-recall and roc curves
   ├── .gitignore
-  ├── README.md
   ├── config.yml                # configuration file with parameters and settings
+  ├── creditcard.csv            # to be added
   ├── main.ipynb
-  └── creditcard.csv            # To be added
+  ├── README.md
+  └── requirements.txt          # project dependencies
   ```
 
 **Note:** The path location of the dataset is stored in the `config.yml` file. Please adjust it or upload the dataset to your local repository.
 
-#### :handshake: References
+### :handshake: References
 - [Kaggle Dataset](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
+- [Optuna Website](https://optuna.org/)
+  
