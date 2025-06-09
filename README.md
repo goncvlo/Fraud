@@ -23,15 +23,15 @@ Accuracy = P(Forecast = Actual)
 
 #### Model
 
-The table below summarizes the performance metrics obtained from evaluating different algorithms on the test set.
+The table below summarizes the performance metrics obtained from evaluating different algorithms on the validation set.
 All algorithms were optimized to maximize accuracy through bayesian search using optuna library (n_trials=10) and leveraging over sampling.
 
 | Algorithm   | Accuracy | Precision | Recall | F1 Score |
 |-------------|----------|-----------|--------|----------|
-| XGBClassifier | 0.99958 | 0.88000 | 0.88000 | 0.88000 |
-| LGBMClassifier | 0.99951 | 0.90909 | 0.80000 | 0.85106 |
-| DecisionTreeClassifier | 0.99656 | 0.30645 | 0.76000 | 0.43678 |
-| LogisticRegression | 0.95696 | 0.03333 | 0.84000 | 0.06412 |
+| LGBMClassifier | 0.999933 | 0.999866 | 1.000000 | 0.999933 |
+| XGBClassifier | 0.999816 | 0.999633 | 1.000000 | 0.999816 |
+| DecisionTreeClassifier | 0.998865 | 0.997735 | 1.000000 | 0.998866 |
+| LogisticRegression | 0.922093 | 0.954408 | 0.886486 | 0.919160 |
 
 The notebooks folder, explores other material such as decision boundaries in 2D or threshold optimization through `predict_proba` method.
 
