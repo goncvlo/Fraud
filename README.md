@@ -36,7 +36,7 @@ All algorithms were optimized to maximize accuracy through bayesian search using
 The notebooks folder, explores other material such as decision boundaries in 2D or threshold optimization through `predict_proba` method.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/0ee18c66-c62e-40eb-a1a9-853b98fcf2f5" />
+  <img src="https://github.com/user-attachments/assets/b43ed4dc-7e2f-4f69-aeab-b6f5406e9fcf" />
 </p>
 <p align="center"><em>Figure 1:</em> Example of decision boundary for logistic regression algorithm.</p>
 
