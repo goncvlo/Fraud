@@ -37,15 +37,26 @@ class HyperParamSearch:
         return np.mean(cv_scores)
     
     def _suggest_hyperparams(self, trial: optuna.trial.Trial) -> dict:
-        """Suggest hyperparameters based on the config, using trial."""
-        tunable_params = {
-            hp: (
-                trial.suggest_float(name=hp, low=bounds[0], high=bounds[1])
-                if hp in self.param_grid['float_params']
-                else trial.suggest_int(name=hp, low=bounds[0], high=bounds[1])
-            )
-            for hp, bounds in self.param_grid['tunable'].items()
-        }
+        tunable_params = {}
+        tunable_config = self.param_grid['tunable']
+        
+        for hp, bounds in tunable_config.items():
+            if hp == "hidden_layer_sizes":
+                n_layers_bounds = bounds["n_layers"]
+                n_units_bounds = bounds["n_units"]
+
+                n_layers = trial.suggest_int("n_layers", n_layers_bounds[0], n_layers_bounds[1])
+                hidden_layer_sizes = tuple(
+                    trial.suggest_int(f"layer_{i}_units", n_units_bounds[0], n_units_bounds[1])
+                    for i in range(n_layers)
+                )
+                tunable_params[hp] = hidden_layer_sizes
+
+            elif hp in self.param_grid['float_params']:
+                tunable_params[hp] = trial.suggest_float(hp, bounds[0], bounds[1])
+            else:
+                tunable_params[hp] = trial.suggest_int(hp, bounds[0], bounds[1])
+
         return {**tunable_params, **self.param_grid['fixed']}
     
 
