@@ -18,7 +18,7 @@ class HyperParamSearch:
 
     def fit(
             self
-            , train: dict[str, pd.DataFrame]
+            , X: pd.DataFrame, y: pd.Series # training set
             , trial: optuna.trial.Trial
             ) -> float:
         
@@ -29,7 +29,7 @@ class HyperParamSearch:
         # strat kfold cv on training data
         cv_scores = cross_val_score(
             estimator=clf,
-            X=train['X'], y=train['y'],
+            X=X, y=y,
             scoring=self.scoring_metric,
             cv=self.cross_validator
             )
