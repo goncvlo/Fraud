@@ -8,7 +8,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
 from xgboost import XGBClassifier
 from lightgbm import LGBMClassifier
-from catboost import CatBoostClassifier
+#from catboost import CatBoostClassifier
 
 # supported algorithms
 algorithms = {
@@ -21,7 +21,7 @@ algorithms = {
     , 'MLPClassifier': MLPClassifier
     , 'XGBClassifier': XGBClassifier
     , 'LGBMClassifier': LGBMClassifier
-    , 'CatBoostClassifier': CatBoostClassifier
+    #, 'CatBoostClassifier': CatBoostClassifier
     }
 
 
