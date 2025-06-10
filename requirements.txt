@@ -12,3 +12,4 @@ lightgbm==4.6.0
 PyYAML==6.0.2
 optuna==4.3.0
 tensorflow==2.19.0
+keras_tuner==1.4.7
