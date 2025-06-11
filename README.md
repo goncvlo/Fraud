@@ -23,8 +23,7 @@ Accuracy = P(Forecast = Actual)
 
 #### Model
 
-The table below summarizes the performance metrics obtained from evaluating different algorithms on the validation set.
-All algorithms were optimized to maximize accuracy through bayesian search using optuna library (n_trials=10) and leveraging over sampling.
+The table below presents performance metrics from cross-validation evaluations of various algorithms. Each algorithm was optimized for accuracy using Bayesian optimization (Optuna, n_trials = 10) with oversampling applied during training.
 
 | Algorithm   | Accuracy | Precision | Recall | F1 Score |
 |-------------|----------|-----------|--------|----------|
@@ -33,7 +32,7 @@ All algorithms were optimized to maximize accuracy through bayesian search using
 | DecisionTreeClassifier | 0.998865 | 0.997735 | 1.000000 | 0.998866 |
 | LogisticRegression | 0.922093 | 0.954408 | 0.886486 | 0.919160 |
 
-The notebooks folder, explores other material such as decision boundaries in 2D or threshold optimization through `predict_proba` method.
+The notebooks folder explores additional topics, including `2D decision boundaries`, `threshold optimization` using the predict_proba method, and `deep learning methodologies`.
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/b43ed4dc-7e2f-4f69-aeab-b6f5406e9fcf" />
@@ -49,6 +48,7 @@ The notebooks folder, explores other material such as decision boundaries in 2D 
 ```python
   ├── notebooks/                # exploration notebooks
   | ├── decision_boundary.ipynb
+  | ├── deep_learning.ipynb
   | ├── feature_selection.ipynb
   | └── threshold.ipynb
   ├── src/
