@@ -20,21 +20,30 @@ class HyperParamSearch:
             self
             , X: pd.DataFrame, y: pd.Series # training set
             , trial: optuna.trial.Trial
+            , X_val: pd.DataFrame = None, y_val: pd.Series = None
             ) -> float:
         
         # set suggested hyper-parameters
         hyperparams = self._suggest_hyperparams(trial)
-        clf = Classifier(algorithm=self.algorithm, **hyperparams).model
-    
+        clf = Classifier(algorithm=self.algorithm, **hyperparams)
+
+        # holdout validation for algorithm comparasion
+        if X_val is not None and y_val is not None:
+            clf.fit(X, y)
+            scorer = Evaluation(clf=clf, threshold=0.5)
+            # LOG ALL METRICS WHEN SETTING EXPERIMENT TRACKER !!
+            score = scorer.fit(metric=self.scoring_metric, validation=(X_val, y_val))
+            return score
+
         # strat kfold cv on training data
-        cv_scores = cross_val_score(
-            estimator=clf,
-            X=X, y=y,
-            scoring=self.scoring_metric,
-            cv=self.cross_validator
-            )
-        
-        return np.mean(cv_scores)
+        else:
+            cv_scores = cross_val_score(
+                estimator=clf.model,
+                X=X, y=y,
+                scoring=self.scoring_metric,
+                cv=self.cross_validator
+                )
+            return np.mean(cv_scores)
     
     def _suggest_hyperparams(self, trial: optuna.trial.Trial) -> dict:
         tunable_params = {}
