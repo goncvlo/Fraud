@@ -1,82 +1,80 @@
 # Fraud
 
 Fraud is a project that explores `classification techniques` in the context of `artificial intelligence` to perform fraud detection.
-The dataset used is `Credit Card Fraud Detection Dataset 2023`, from Kaggle, which "(...) contains credit card transactions made by European cardholders in the year 2023 (...)".
+The dataset used is [`Credit Card Fraud Detection (UBL)`](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud), from Kaggle, which "(...) contains transactions made by credit cards in September 2013 by European cardholders. This dataset presents transactions that occurred in two days, where we have 492 frauds out of 284,807 transactions. (...)".
 
-#### :test_tube: Work
-The original dataset is balanced, i.e., contains the same proportion of fraudulent observations as non-fraudulent observations. To make it more challenging and closer to a real-world scenario, the **proportion of fraudulent observations was set to 1%**. The `main.py` notebook aims to show how one could create an intelligent system to accurately identify both fraudulent and non-fraudulent transactions.
+### :test_tube: Work
+The `main.py` notebook aims to show how one could create an intelligent system to accurately identify both fraudulent and non-fraudulent transactions.
 
-Note that, in this case, a *random classifier which predicts fraudulent 1% of time and non-fraudulent 99% of the time*, would already achieve an *accuracy of 98.02%*. If this serves as a baseline model, then the model to be developed needs to perform better, i.e., an accuracy greater than 98.02%.
+#### Baseline Model
+Using as baseline model an estimator which *randomly predicts fraud 0.173% of the time and non-fraud 99.827% of the time, would already yield an accuracy of 99.65%.* In such an extreme case, note that an *estimator which always "predicts" non-fraud, achieves an accuracy of 99.827% - as it correctly identifies all the non-fradulent transactions but misses to correctly identify all the fraudelent transactions.*
+
+In either case, the model being developed must surpass this accuracy.
 
 ```python
+# accuracy computation for 1st baseline model
 Accuracy = P(Forecast = Actual)
          = P(A=1) x P(F=1 | A=1) + P(A=0) x P(F=0 | A=0)
          = P(A=1) x P(F=1)       + P(A=0) x P(F=0)
-         = 0.01^2                + 0.99^2
+         = (0.173%)^2            + (1-0.173%)^2
 
-# Similarly, it can be shown that precision, recall and f1-score are equal to 0.01, for this random classifier. 
+# similarly, it can be shown that precision, recall and f1-score are equal to 0.173%
 ```
 
-The notebooks folder, explores other material such as decision boundaries in 2D or threshold optimization through `predict_proba` method.
+#### Model
+
+The table below presents performance metrics from cross-validation evaluations of various algorithms. Each algorithm was optimized for accuracy using Bayesian optimization (Optuna, n_trials = 10) with oversampling applied during training.
+
+| Algorithm   | Accuracy | Precision | Recall | F1 Score |
+|-------------|----------|-----------|--------|----------|
+| LGBMClassifier | 0.999933 | 0.999866 | 1.000000 | 0.999933 |
+| XGBClassifier | 0.999816 | 0.999633 | 1.000000 | 0.999816 |
+| DecisionTreeClassifier | 0.998865 | 0.997735 | 1.000000 | 0.998866 |
+| LogisticRegression | 0.922093 | 0.954408 | 0.886486 | 0.919160 |
+
+The notebooks folder explores additional topics, including `2D decision boundaries`, `threshold optimization` using the predict_proba method, and `deep learning methodologies`.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/b3dee06d-b155-42b2-b0d4-092c5c941ac5" />
+  <img src="https://github.com/user-attachments/assets/b43ed4dc-7e2f-4f69-aeab-b6f5406e9fcf" />
 </p>
 <p align="center"><em>Figure 1:</em> Example of decision boundary for logistic regression algorithm.</p>
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/f7157b4c-2509-4fdc-91aa-6b5c296c9f92" />
+  <img src="https://github.com/user-attachments/assets/b944db40-bd07-43a4-82d9-65722680d746" />
 </p>
 <p align="center"><em>Figure 2:</em> Example of classification threshold optimization.</p>
 
-#### :file_folder: Repository structure
+### :file_folder: Repository structure
 ```python
   ├── notebooks/                # exploration notebooks
   | ├── decision_boundary.ipynb
+  | ├── deep_learning.ipynb
+  | ├── feature_selection.ipynb
   | └── threshold.ipynb
   ├── src/
   │ ├── data/                   # data loading and preprocessing utilities
   │ │ ├── prepare_data.py
   │ │ └── utils.py
   │ ├── models/                 # model-related components
-  │ │ ├── classification.py
   │ │ ├── evaluation.py
   │ │ ├── feature_selection.py  # statistical tests and wrapper methods
-  │ │ ├── model_selection.py    # grid-search and threshold evaluation
+  │ │ ├── model.py
+  │ │ ├── tuner.py              # bayesian search for hyperparam and sample_weight optimization
   │ │ └── utils.py
   │ └── visuals/
   │   ├── boundary.py           # 2D decision boundaries
   │   └── pr_roc_curve.py       # precision-recall and roc curves
   ├── .gitignore
-  ├── README.md
   ├── config.yml                # configuration file with parameters and settings
-  └── main.ipynb
+  ├── creditcard.csv            # to be added
+  ├── main.ipynb
+  ├── README.md
+  └── requirements.txt          # project dependencies
   ```
 
 **Note:** The path location of the dataset is stored in the `config.yml` file. Please adjust it or upload the dataset to your local repository.
 
-#### :rocket: Installation
-
-Follow the steps below to set up this project on your local machine.
-Open the terminal and run the following lines of code.
-
-```bash
-# 1. Navigate to the directory where you'd like to save the project
->> cd /path/to/your/preferred/location
-
-# 2. Clone the repo by running
->> git clone https://github.com/6oncvlo/Fraud.git
-
-# 3. Navigate into the project folder
->> cd Fraud
-
-# 4. [Optional] Set up and activate virtual environment
->> python -m venv .venv  
->> .venv\Scripts\activate
-
-# 5. Install project dependencies
->> pip install -r requirements.txt
-
-```
-#### :handshake: References
-- [Kaggle Dataset](https://www.kaggle.com/datasets/nelgiriyewithana/credit-card-fraud-detection-dataset-2023)
+### :handshake: References
+- [Kaggle Dataset](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
+- [Optuna Website](https://optuna.org/)
+  
