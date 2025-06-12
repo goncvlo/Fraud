@@ -6,10 +6,10 @@ from src.models.model import Classifier
 
 # supported metrics
 metrics = {
-    'accuracy': accuracy_score,
-    'precision': precision_score,
-    'recall': recall_score,
-    'f1_score': f1_score
+    "accuracy": accuracy_score,
+    "precision": precision_score,
+    "recall": recall_score,
+    "f1_score": f1_score
 }
 
 
@@ -35,7 +35,7 @@ class Evaluation:
         selected_metrics = {metric: metrics[metric]} if metric else metrics
 
         for name, (X, y_true) in datasets.items():
-            y_prob = self.model.score(X=X)[:, -1]
+            y_prob = self.model.predict_proba(X=X)[:, -1]
             y_pred = np.where(y_prob >= self.threshold, 1, 0)
 
             row = {"dataset": name}
