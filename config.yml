@@ -1,3 +1,5 @@
+general:
+  seed: 42 # ensuring reproducibility
 data_loader:
   path: creditcard.csv
 train_test_split:
@@ -23,6 +25,7 @@ optimization:
         gamma: [0, 10]
         subsample: [0.5, 1]
       float_params: ["learning_rate", "gamma", "subsample"]
+      categ_params: []
     LGBMClassifier:
       fixed:
         boosting_type: "gbdt"
@@ -38,6 +41,7 @@ optimization:
         reg_alpha: [0.1, 10.0]
         reg_lambda: [0.1, 10.0]
       float_params: ["learning_rate", "colsample_bytree", "reg_alpha", "reg_lambda"]
+      categ_params: []
     GradientBoostingClassifier:
       fixed:
         loss: "log_loss"
@@ -51,6 +55,7 @@ optimization:
         max_depth: [3, 20]
         max_features: [5, 30]
       float_params: ["learning_rate", "subsample"]
+      categ_params: []
     RandomForestClassifier:
       fixed:
         criterion: "gini"
@@ -65,6 +70,7 @@ optimization:
         min_samples_leaf: [1, 10]
         max_features: [5, 30]
       float_params: []
+      categ_params: []
     DecisionTreeClassifier:
       fixed:
         criterion: "gini"
@@ -74,6 +80,7 @@ optimization:
         max_depth: [3, 20]
         min_samples_leaf: [2, 20]
       float_params: []
+      categ_params: []
     LogisticRegression:
       fixed:
         penalty: "l2"
@@ -88,6 +95,7 @@ optimization:
         C: [0.2, 5]
         max_iter: [100, 1000]
       float_params: ["tol", "C"]
+      categ_params: []
     KNeighborsClassifier:
       fixed:
         weights: "uniform"
@@ -98,6 +106,7 @@ optimization:
         leaf_size: [15, 100]
         p: [2, 10]
       float_params: []
+      categ_params: []
     MLPClassifier:
       fixed:
         activation: "logistic"
@@ -119,6 +128,20 @@ optimization:
         beta_1: [0.0, 1.0]
         beta_2: [0.0, 1.0]
       float_params: ["alpha", "learning_rate_init", "beta_1", "beta_2"]
+      categ_params: []
+    NeuralNetworkClassifier:
+      fixed:
+        loss: "binary_crossentropy"
+        scoring_metric: "accuracy"
+      tunable:
+        n_layers: [4, 8]
+        batch_size: [16, 128]
+        epochs: [3, 5]
+        n_units: [32, 128]
+        activation_function: ["sigmoid", "relu"]
+        learning_rate: [0.0001, 0.01]
+      float_params: ["learning_rate"]
+      categ_params: ["activation_function"]
 
   feature_selection:
     tolerance: 0.0005
