@@ -2,7 +2,10 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import cross_val_score, StratifiedKFold, TunedThresholdClassifierCV
 from sklearn.utils.class_weight import compute_sample_weight
+from sklearn.base import clone
 import optuna
+import tensorflow as tf
+from tensorflow import keras
 
 from src.models.model import Classifier
 from src.models.evaluation import Evaluation
@@ -11,10 +14,10 @@ from src.models.evaluation import Evaluation
 class HyperParamSearch:
     def __init__(self, config: dict, algorithm: str):
         """Set CV settings, scoring metric and hyperparameters space."""
-        self.cross_validator = config['cross_validator']
-        self.scoring_metric = config['scoring_metric']
+        self.cross_validator = config["cross_validator"]
+        self.scoring_metric = config["scoring_metric"]
         self.algorithm = algorithm
-        self.param_grid = config['param_grid'][self.algorithm]
+        self.param_grid = config["param_grid"][self.algorithm]
 
     def fit(
             self
@@ -25,7 +28,10 @@ class HyperParamSearch:
         
         # set suggested hyper-parameters
         hyperparams = self._suggest_hyperparams(trial)
-        clf = Classifier(algorithm=self.algorithm, **hyperparams)
+        if self.algorithm == "NeuralNetworkClassifier":
+            clf = Classifier(algorithm=self.algorithm, hyperparams=hyperparams)
+        else: # not in this case, but Classifier class can use default algo params
+            clf = Classifier(algorithm=self.algorithm, **hyperparams)
 
         # holdout validation for algorithm comparasion
         if X_val is not None and y_val is not None:
@@ -47,7 +53,7 @@ class HyperParamSearch:
     
     def _suggest_hyperparams(self, trial: optuna.trial.Trial) -> dict:
         tunable_params = {}
-        tunable_config = self.param_grid['tunable']
+        tunable_config = self.param_grid["tunable"]
         
         for hp, bounds in tunable_config.items():
             if hp == "hidden_layer_sizes":
@@ -61,12 +67,22 @@ class HyperParamSearch:
                 )
                 tunable_params[hp] = hidden_layer_sizes
 
-            elif hp in self.param_grid['float_params']:
+            elif hp == "n_layers":
+                tunable_params[hp] = trial.suggest_int(hp, bounds[0], bounds[1])
+                for i in range(tunable_params[hp]):
+                    tunable_params[f"units_{i}"] = trial.suggest_int(f"units_{i}", tunable_config["n_units"][0], tunable_config["n_units"][1])
+                    tunable_params[f"activation_{i}"] = trial.suggest_categorical(f"activation_{i}", tunable_config["activation_function"])
+
+            elif hp in ["n_units", "activation_function"]:
+                pass
+            elif hp in self.param_grid["float_params"]:
                 tunable_params[hp] = trial.suggest_float(hp, bounds[0], bounds[1])
+            elif hp in self.param_grid["categ_params"]:
+                tunable_params[hp] = trial.suggest_categorical(hp, bounds)
             else:
                 tunable_params[hp] = trial.suggest_int(hp, bounds[0], bounds[1])
 
-        return {**tunable_params, **self.param_grid['fixed']}
+        return {**tunable_params, **self.param_grid["fixed"]}
     
 
 class LabelWeightSearch:
@@ -90,9 +106,10 @@ class LabelWeightSearch:
             sample_weight = compute_sample_weight(
                 class_weight={0: w0, 1: w1}, y=y_train
                 )
-            self.model.fit(X_train, y_train, sample_weight=sample_weight)
+            model = clone(self.model) # avoid retaining internal state after fitted > fresh estimator
+            model.fit(X_train, y_train, sample_weight=sample_weight)
 
-            score = Evaluation(clf=self.model)
+            score = Evaluation(clf=model)
             score = score.fit(metric=self.scoring_metric, test=(X_val, y_val))
             scores.append(score)
         
@@ -102,8 +119,8 @@ class LabelWeightSearch:
 class ClassifierThreshold():
     def __init__(self, config: dict):
         """Set CV settings and scoring metric."""
-        self.cross_validator = config['cross_validator']
-        self.scoring_metric = config['scoring_metric']
+        self.cross_validator = config["cross_validator"]
+        self.scoring_metric = config["scoring_metric"]
     
     def fit(self, clf: Classifier, X: pd.DataFrame, y: pd.Series):
         """Fits TunedThresholdClassifierCV to get best threshold."""
@@ -111,10 +128,10 @@ class ClassifierThreshold():
         tuned_clf = TunedThresholdClassifierCV(
             estimator=clf.model
             , scoring=self.scoring_metric
-            , response_method='predict_proba'
+            , response_method="predict_proba"
             , cv=self.cross_validator
             , refit=True
-            , random_state=123
+            , random_state=42
             , store_cv_results=True
         )
         tuned_clf.fit(X=X, y=y)
