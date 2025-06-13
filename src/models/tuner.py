@@ -85,7 +85,7 @@ class HyperParamSearch:
 class LabelWeightSearch:
     def __init__(self, config: dict, estimator: Classifier):
         self.cross_validator = config["cross_validator"]
-        self.model = estimator
+        self.model = estimator.model
         self.scoring_metric = config["scoring_metric"]
 
     def fit(self, X: pd.DataFrame, y: pd.Series, trial: optuna.trial.Trial):
