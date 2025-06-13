@@ -12,19 +12,13 @@ from tensorflow import keras
     
 
 class NeuralNetworkClassifier:
-    def __init__(self, hyperparams: dict, input_size: int = 30):
-        """
-        Set algorithm hyperparameters and model.
-
-        Args:
-            hyperparameters (dict): Hyperparams for the specified algorithm.
-            input_size (int): Number of (normalized) features.
-        """
-        self.hyperparams = hyperparams
+    def __init__(self, **kwargs):
+        """Set algorithm hyperparameters and model."""
+        self.hyperparams = kwargs
 
         # build and assign model
         model = keras.Sequential()
-        model.add(keras.Input(shape=(input_size,)))
+        model.add(keras.Input(shape=(self.hyperparams['input_size'],)))
         for i in range(self.hyperparams["n_layers"]):
             n_units = self.hyperparams[f"units_{i}"]
             activation = self.hyperparams[f"activation_{i}"]

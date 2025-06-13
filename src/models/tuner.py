@@ -28,10 +28,7 @@ class HyperParamSearch:
         
         # set suggested hyper-parameters
         hyperparams = self._suggest_hyperparams(trial)
-        if self.algorithm == "NeuralNetworkClassifier":
-            clf = Classifier(algorithm=self.algorithm, hyperparams=hyperparams)
-        else: # not in this case, but Classifier class can use default algo params
-            clf = Classifier(algorithm=self.algorithm, **hyperparams)
+        clf = Classifier(algorithm=self.algorithm, **hyperparams)
 
         # holdout validation for algorithm comparasion
         if X_val is not None and y_val is not None:
