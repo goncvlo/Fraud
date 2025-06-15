@@ -18,6 +18,7 @@ class HyperParamSearch:
         self.scoring_metric = config["scoring_metric"]
         self.algorithm = algorithm
         self.param_grid = config["param_grid"][self.algorithm]
+        self.results = dict()
 
     def fit(
             self
@@ -34,9 +35,9 @@ class HyperParamSearch:
         if X_val is not None and y_val is not None:
             clf.fit(X, y)
             scorer = Evaluation(clf=clf, threshold=0.5)
-            # LOG ALL METRICS WHEN SETTING EXPERIMENT TRACKER !!
-            score = scorer.fit(metric=self.scoring_metric, validation=(X_val, y_val))
-            return score
+            score = scorer.fit(train=(X, y), validation=(X_val, y_val))
+            self.results[trial.number] = score
+            return score.loc["validation", self.scoring_metric]
 
         # strat kfold cv on training data
         else:
