@@ -1,12 +1,11 @@
+import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from imblearn.under_sampling import RandomUnderSampler
 from imblearn.over_sampling import RandomOverSampler
-
-import os
-import numpy as np
 import random
 import tensorflow as tf
+#import os
 
 
 def train_splits(features: pd.DataFrame, labels: pd.Series, config: dict):
