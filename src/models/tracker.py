@@ -1,5 +1,4 @@
 import os
-import mlflow.tracing
 import pandas as pd
 import time
 from typing import Union
