@@ -29,7 +29,15 @@ def log_run(
                 log_artifact(artifact=study.best_trial.value, artifact_name=tuner.scoring_metric)
 
                 log_artifact(artifact=study.trials_dataframe(), artifact_name="bayes_search", artifact_path="stats")
-                log_artifact(artifact=tuner.results, artifact_name="results")
+                # convert trials results dictionary to dataframe
+                results = []
+                for split_id, split_data in tuner.results.items():
+                    for dataset, metrics in split_data.items():
+                        row = {'split_id': split_id, 'metric': dataset}
+                        row.update(metrics)
+                        results.append(row)
+                results = pd.DataFrame(results)
+                log_artifact(artifact=results, artifact_name="results", artifact_path="stats")
                 log_artifact(artifact=tuner.param_grid, artifact_name="param_grid")
 
 
