@@ -5,10 +5,11 @@ data_loader:
 train_test_split:
   test_size: 0.05
   train_sizes: [0.5]
-
+  
 optimization:
   cross_validator: 5
   scoring_metric: "accuracy"
+  n_trials: 10
 
   param_grid:
     XGBClassifier:
@@ -32,6 +33,7 @@ optimization:
         subsample_for_bin: 200000
         objective: "binary"
         random_state: 42
+        verbose: 0
       tunable:
         num_leaves: [5, 200]
         max_depth: [5, 20]
@@ -61,7 +63,7 @@ optimization:
         criterion: "gini"
         bootstrap: True
         oob_score: False
-        verbose: 3
+        verbose: 0
         random_state: 42
       tunable:
         n_estimators: [3, 100]
@@ -135,9 +137,9 @@ optimization:
         loss: "binary_crossentropy"
         scoring_metric: "accuracy"
         epochs: 5
+        batch_size: 64
       tunable:
         n_layers: [8, 16]
-        batch_size: [16, 128]
         n_units: [32, 256]
         activation_function: ["sigmoid", "relu"]
         learning_rate: [0.0001, 0.01]
