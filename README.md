@@ -23,16 +23,18 @@ Accuracy = P(Forecast = Actual)
 
 #### Model
 
-The table below presents performance metrics from cross-validation evaluations of various algorithms. Each algorithm was optimized for accuracy using Bayesian optimization (Optuna, n_trials = 10) with oversampling applied during training.
+The table below presents performance metrics from cross-validation evaluations of various algorithms. Each algorithm was optimized for accuracy using Bayesian optimization (Optuna, n_trials = 10) with oversampling applied during training. Check `model_selection.ipynb` notebook for more details.
 
-| Algorithm   | Accuracy | Precision | Recall | F1 Score |
-|-------------|----------|-----------|--------|----------|
-| LGBMClassifier | 0.999933 | 0.999866 | 1.000000 | 0.999933 |
-| XGBClassifier | 0.999816 | 0.999633 | 1.000000 | 0.999816 |
-| DecisionTreeClassifier | 0.998865 | 0.997735 | 1.000000 | 0.998866 |
-| LogisticRegression | 0.922093 | 0.954408 | 0.886486 | 0.919160 |
+| Algorithm   | Accuracy | Precision | Recall | F1 Score | Trial Index | Training Time (secs) |
+|-------------|----------|-----------|--------|----------|----------|----------|
+| LGBMClassifier | 0.99978 | 0.95455 | 0.91304 | 0.93333 | 0 | 8.1 |
+| RandomForestClassifier | 0.99963 | 0.90909 | 0.86957 | 0.88889 | 2 | 24.6 |
+| XGBClassifier | 0.99956 | 0.86957 | 0.86957 | 0.86957 | 0 | 5.7 |
+| NeuralNetworkClassifier | 0.99941 | 0.80000 | 0.86957 | 0.83333 | 7 | 201.1 |
+| DecisionTreeClassifier | 0.99727 | 0.36538 | 0.82609 | 0.50667 | 6 | 19.1 |
+| LogisticRegression | 0.97413 | 0.05930 | 0.95652 | 0.11168 | 2 | 1.5 |
 
-The notebooks folder explores additional topics, including `2D decision boundaries`, `threshold optimization` using the predict_proba method, and `deep learning methodologies`.
+The notebooks folder explores additional topics, including `2D decision boundaries`, `deep learning modeling`, `threshold optimization`, and `bootstrap technique`.
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/b43ed4dc-7e2f-4f69-aeab-b6f5406e9fcf" />
@@ -47,9 +49,11 @@ The notebooks folder explores additional topics, including `2D decision boundari
 ### :file_folder: Repository structure
 ```python
   ├── notebooks/                # exploration notebooks
+  | ├── bootstrap.ipynb         # ensemble model
   | ├── decision_boundary.ipynb
   | ├── deep_learning.ipynb
   | ├── feature_selection.ipynb
+  | ├── model_selection.ipynb
   | └── threshold.ipynb
   ├── src/
   │ ├── data/                   # data loading and preprocessing utilities
@@ -59,6 +63,7 @@ The notebooks folder explores additional topics, including `2D decision boundari
   │ │ ├── evaluation.py
   │ │ ├── feature_selection.py  # statistical tests and wrapper methods
   │ │ ├── model.py
+  │ │ ├── tracker.py            # mlflow for experiment tracking
   │ │ ├── tuner.py              # bayesian search for hyperparam and sample_weight optimization
   │ │ └── utils.py
   │ └── visuals/
@@ -76,5 +81,7 @@ The notebooks folder explores additional topics, including `2D decision boundari
 
 ### :handshake: References
 - [Kaggle Dataset](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
-- [Optuna Website](https://optuna.org/)
+- [Optuna](https://optuna.org/)
+- [MLflow](https://mlflow.org/)
+- [Keras](https://www.tensorflow.org/guide/keras)
   
