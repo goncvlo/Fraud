@@ -4,8 +4,6 @@ from sklearn.model_selection import cross_val_score, StratifiedKFold, TunedThres
 from sklearn.utils.class_weight import compute_sample_weight
 from sklearn.base import clone
 import optuna
-import tensorflow as tf
-from tensorflow import keras
 
 from src.models.model import Classifier
 from src.models.evaluation import Evaluation
