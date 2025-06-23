@@ -27,12 +27,18 @@ The table below presents performance metrics from cross-validation evaluations o
 
 | Algorithm   | Accuracy | Precision | Recall | F1 Score | Trial Index | Training Time (secs) |
 |-------------|----------|-----------|--------|----------|----------|----------|
-| LGBMClassifier | 0.99978 | 0.95455 | 0.91304 | 0.93333 | 0 | 8.1 |
+| LGBMClassifier :trophy: | 0.99978 | 0.95455 | 0.91304 | 0.93333 | 0 | 8.1 |
 | RandomForestClassifier | 0.99963 | 0.90909 | 0.86957 | 0.88889 | 2 | 24.6 |
 | XGBClassifier | 0.99956 | 0.86957 | 0.86957 | 0.86957 | 0 | 5.7 |
 | NeuralNetworkClassifier | 0.99941 | 0.80000 | 0.86957 | 0.83333 | 7 | 201.1 |
-| DecisionTreeClassifier | 0.99727 | 0.36538 | 0.82609 | 0.50667 | 6 | 19.1 |
-| LogisticRegression | 0.97413 | 0.05930 | 0.95652 | 0.11168 | 2 | 1.5 |
+| DecisionTreeClassifier :no_entry: | 0.99727 | 0.36538 | 0.82609 | 0.50667 | 6 | 19.1 |
+| LogisticRegression :no_entry: | 0.97413 | 0.05930 | 0.95652 | 0.11168 | 2 | 1.5 |
+
+Note that
+- all four metrics - accuracy, precision, recall and f1-score, have range in $[0, 1]$.
+- algorithms tagged with the :no_entry: emoji, don't reach the baseline model accuracy.
+- a model with 100% accuracy represents a 0.17% improvement over the baseline model. LGBMClassifier has an improvement of 0.15%.
+- final evaluation should be done in the test set.
 
 The notebooks folder explores additional topics, including `2D decision boundaries`, `deep learning modeling`, `threshold optimization`, and `bootstrap technique`.
 
