@@ -38,7 +38,7 @@ Note that
 - all four metrics - accuracy, precision, recall and f1-score, have range in $[0, 1]$.
 - algorithms tagged with the :no_entry: emoji, don't reach the baseline model accuracy.
 - a model with 100% accuracy represents a 0.17% improvement over the baseline model. LGBMClassifier has an improvement of 0.15%.
-- final evaluation should be done in the test set.
+- final evaluation should be done in the test set. Therefore, accuracy on test set for best model is 0.99951, which represents an improvement of 0.12%.
 
 The notebooks folder explores additional topics, including `2D decision boundaries`, `deep learning modeling`, `threshold optimization`, and `bootstrap technique`.
 
