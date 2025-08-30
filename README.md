@@ -48,7 +48,7 @@ The notebooks folder explores additional topics, including `2D decision boundari
 <p align="center"><em>Figure 1:</em> Example of decision boundary for logistic regression algorithm.</p>
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/b944db40-bd07-43a4-82d9-65722680d746" />
+  <img src="https://github.com/user-attachments/assets/f8f03615-faac-45c8-84fd-2a4f8d1f0274" />
 </p>
 <p align="center"><em>Figure 2:</em> Example of classification threshold optimization.</p>
 
