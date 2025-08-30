@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 
 from src.models.model import Classifier
 
@@ -9,7 +9,8 @@ metrics = {
     "accuracy": accuracy_score,
     "precision": precision_score,
     "recall": recall_score,
-    "f1_score": f1_score
+    "f1": f1_score,
+    "roc_auc": roc_auc_score
 }
 
 
@@ -40,7 +41,10 @@ class Evaluation:
 
             row = {"dataset": name}
             for metric_name, func in selected_metrics.items():
-                row[metric_name] = round(func(y_true=y_true, y_pred=y_pred), 5)
+                if metric_name in ["roc_auc"]:
+                    row[metric_name] = func(y_true=y_true, y_score=y_prob)
+                else:
+                    row[metric_name] = func(y_true=y_true, y_pred=y_pred)
             results.append(row)
 
         # format output
