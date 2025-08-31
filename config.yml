@@ -9,7 +9,7 @@ train_test_split:
 optimization:
   cross_validator: 5
   direction: maximize
-  scoring_metric: f1
+  metric: f1
   n_trials: 10
 
   param_grid:

@@ -1,44 +1,141 @@
 import os
-import pandas as pd
-import time
-from typing import Union
-from datetime import datetime
-import mlflow
 import subprocess
+import time
 import webbrowser
-import optuna
+from datetime import datetime
+from typing import Union
+
+import mlflow
+import pandas as pd
+from lightgbm import LGBMModel
+from xgboost import XGBModel
+from sklearn.base import BaseEstimator
 
 from src.models.tuner import HyperParamSearch, LabelWeightSearch
+from src.models.model import Classifier
+from src.models.evaluator import Evaluation
 
 
-def log_run(
-        experiment_name: str,
-        study: optuna.study.Study,
-        tuner: Union[HyperParamSearch, LabelWeightSearch]
-        ):
+class Logging:
 
-    with get_or_create_run(run_name=tuner.algorithm, experiment_name=experiment_name) as parent:
-        today_date = datetime.now().strftime("%d%b%Y").upper()
-        with mlflow.start_run(run_name=today_date, nested=True):
+    def __init__(self, experiment_name: str, run_name: str):
+        self.experiment_name = experiment_name
+        self.run_name = run_name
+        # launch MLflow UI
+        launch_mlflow()
 
-            if isinstance(tuner, HyperParamSearch):
+    def log_run(
+        self,
+        clf: Classifier,
+        train: tuple[pd.DataFrame, pd.Series],
+        test: tuple[pd.DataFrame, pd.Series],
+    ):
 
-                log_artifact(artifact=study.best_trial.params, artifact_name="params")
-                log_artifact(artifact=study.best_trial.duration.total_seconds(), artifact_name="duration_secs")
-                log_artifact(artifact=study.best_trial.number, artifact_name="trial_index")
-                log_artifact(artifact=study.best_trial.value, artifact_name=tuner.scoring_metric)
+        with get_run(self.experiment_name, self.run_name) as parent:
+            now = datetime.now().strftime("%d%b%Y_%H%M").upper()
+            with mlflow.start_run(run_name=f"TEST_{now}", nested=True):
+                
+                # get test and training sets performance
+                eval = Evaluation(clf=clf, threshold=0.5)
+                metrics_test = eval.fit(train=train, test=test)
+                
+                # logging
+                mlflow.log_params(params=clf.model.get_params())
+                self._log_model(clf=clf, name=clf.algorithm, input_sample=train[0].head())
+                self._log_df(metrics_test, "metrics_test", "stats")
+                mlflow.log_metrics(metrics_test[metrics_test.index=="test"].iloc[0, :].to_dict())
 
-                log_artifact(artifact=study.trials_dataframe(), artifact_name="bayes_search", artifact_path="stats")
+                for df, name in zip(
+                    [pd.concat(train, axis=1), pd.concat(test, axis=1)],
+                    ["train", "test"]
+                    ):
+                    dataset = mlflow.data.from_pandas(df=df, targets="label", name=name)
+                    mlflow.log_input(dataset=dataset, context=name, tags={"dataset": name})
+
+    def log_tuner(self, tuner: HyperParamSearch):
+
+        with get_run(self.experiment_name, self.run_name) as parent:
+            now = datetime.now().strftime("%d%b%Y_%H%M").upper()
+            with mlflow.start_run(run_name=f"SEARCH_{now}", nested=True):
+
+                # best trial details - scoring_metric direction is maximize
+                best_trial = (
+                    tuner.trials_runs
+                    .sort_values(by=["value"], ascending=[False])
+                    .iloc[0,:]
+                    )
+                metrics = {
+                    "duration_secs": best_trial.duration.total_seconds(),
+                    "trial_index": best_trial.number,
+                    tuner.metric: best_trial.value,
+                }
+                params = (
+                    best_trial
+                    .filter(like="params_")
+                    .rename(lambda c: c.replace("params_", ""))
+                    .to_dict()
+                )
+
+                # logging
+                mlflow.log_metrics(metrics=metrics)
+                mlflow.log_params(params=params)
+                mlflow.log_dict(dictionary=tuner.param_grid, artifact_file="param_grid.yaml")
+                self._log_df(tuner.trials_runs, "trials_runs", "stats")
+
                 # convert trials results dictionary to dataframe
-                results = []
-                for split_id, split_data in tuner.results.items():
-                    for dataset, metrics in split_data.items():
-                        row = {'split_id': split_id, 'metric': dataset}
-                        row.update(metrics)
-                        results.append(row)
-                results = pd.DataFrame(results)
-                log_artifact(artifact=results, artifact_name="results", artifact_path="stats")
-                log_artifact(artifact=tuner.param_grid, artifact_name="param_grid")
+                metrics_val = []
+                for split_id, split_data in tuner.trials_metrics.items():
+                    for dataset, metric in split_data.items():
+                        row = {"trial_index": split_id, "metric": dataset}
+                        row.update(metric)
+                        metrics_val.append(row)
+                metrics_val = pd.DataFrame(metrics_val)
+                self._log_df(metrics_val, "metrics_val", "stats")
+
+    def _log_df(self, df: pd.DataFrame, name: str, path: str):
+
+        df.to_csv(f"{name}.csv")
+        mlflow.log_artifact(f"{name}.csv", artifact_path=path)
+        os.remove(f"{name}.csv")
+
+    def _log_model(
+        self,
+        clf: Classifier,
+        name: str,
+        input_sample: pd.DataFrame,
+    ):
+
+        output_sample = clf.predict(input_sample)
+        input_sample = input_sample.astype(
+            {
+                col: "float"
+                for col in input_sample.select_dtypes(include="int").columns
+            }
+        )
+        signature = mlflow.models.signature.infer_signature(
+            input_sample, output_sample
+        )
+
+        if isinstance(clf.model, XGBModel):
+            mlflow.xgboost.log_model(
+                clf.model, name=name, input_example=input_sample, signature=signature,
+                model_format="json",
+            )
+
+        elif isinstance(clf.model, LGBMModel):
+            mlflow.lightgbm.log_model(
+                clf.model, name=name, input_example=input_sample, signature=signature
+            )
+        
+        elif isinstance(clf.model, BaseEstimator):
+            mlflow.sklearn.log_model(
+                clf.model, name=name, input_example=input_sample, signature=signature
+                )
+
+        else:
+            raise NotImplementedError(
+                f"Logging not implemented for model type: {type(clf.model)}"
+            )
 
 
 def launch_mlflow():
@@ -50,25 +147,7 @@ def launch_mlflow():
     mlflow.set_tracking_uri("http://127.0.0.1:5000")
 
 
-def log_artifact(artifact: Union[pd.DataFrame, dict, float, int], artifact_name: str, artifact_path: str = "default"):
-    """Save object locally, log it as an artifact, and delete it."""
-
-    if isinstance(artifact, pd.DataFrame):
-        artifact.to_csv(f"{artifact_name}.csv")
-        mlflow.log_artifact(f"{artifact_name}.csv", artifact_path=artifact_path)
-        os.remove(f"{artifact_name}.csv")
-    
-    if isinstance(artifact, dict):
-        if artifact_name=="params":
-            mlflow.log_params(params=artifact)
-        else:
-            mlflow.log_dict(dictionary=artifact, artifact_file=f"{artifact_name}.yaml")
-    
-    if isinstance(artifact, (float, int)):
-        mlflow.log_metric(key=artifact_name, value=artifact)
-
-
-def get_or_create_run(run_name: str, experiment_name: str):
+def get_run(experiment_name: str, run_name: str):
     client = mlflow.tracking.MlflowClient()
 
     # get or create experiment
@@ -84,9 +163,9 @@ def get_or_create_run(run_name: str, experiment_name: str):
     runs = client.search_runs(
         experiment_ids=[experiment_id],
         filter_string=f"tags.mlflow.runName = '{run_name}'",
-        order_by=["start_time DESC"]
+        order_by=["start_time DESC"],
     )
-    
+
     if runs:
         # resume existing run (will inherit correct experiment)
         existing_run_id = runs[0].info.run_id
@@ -94,3 +173,4 @@ def get_or_create_run(run_name: str, experiment_name: str):
     else:
         # create new run in the selected experiment
         return mlflow.start_run(run_name=run_name)
+    

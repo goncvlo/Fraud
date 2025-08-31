@@ -13,10 +13,10 @@ class HyperParamSearch:
     def __init__(self, config: dict, algorithm: str):
         """Set CV settings, scoring metric and hyperparameters space."""
         self.cross_validator = config["cross_validator"]
-        self.scoring_metric = config["scoring_metric"]
+        self.metric = config["metric"]
         self.algorithm = algorithm
         self.param_grid = config["param_grid"][self.algorithm]
-        self.results = dict()
+        self.trials_metrics = dict()
 
     def fit(
             self
@@ -34,15 +34,15 @@ class HyperParamSearch:
             clf.fit(X_train, y_train)
             scorer = Evaluation(clf=clf, threshold=0.5)
             score = scorer.fit(train=(X_train, y_train), test=(X_val, y_val))
-            self.results[trial.number] = score
-            return score.loc["test", self.scoring_metric]
+            self.trials_metrics[trial.number] = score
+            return score.loc["test", self.metric]
 
         # strat kfold cv on training data
         else:
             cv_scores = cross_val_score(
                 estimator=clf.model,
                 X=X_train, y=y_train,
-                scoring=self.scoring_metric,
+                scoring=self.metric,
                 cv=self.cross_validator
                 )
             return np.mean(cv_scores)
